@@ -26,20 +26,20 @@ different functions.
 It provides the following code generation commands.  Below are
 animated examples of each command.
 
-| Command                           | Keychord    | Description                                                                                                                                                   |
-|-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `pygen-generate-class'            | `C-c C-= c' | Generate a python class from the reference under point.                                                                                                       |
-| `pygen-generate-function'         | `C-c C-= f' | Generate a python function from the reference under point.                                                                                                    |
-| `pygen-generate-static-function'  | `C-c C-= s' | Generate a static python function from the reference under point.                                                                                             |
-| `pygen-extract-variable'          | `C-c C-= v' | Extract the current region into a variable.                                                                                                                   |
-| `pygen-make-keyword-argument'     | `C-c C-= k' | Adds a keyword argument to the current function.                                                                                                              |
-| `pygen-make-sequence-argument'    | `C-c C-= a' | Adds a sequence argument to the current function.                                                                                                             |
-| `pygen-add-decorator-to-function' | `C-c C-= @' | Adds a decorator in front of the current function.                                                                                                            |
-| `pygen-make-static'               | `C-c C-= m' | Turns the current function into a static function.                                                                                                            |
-| `pygen-selfify-symbol'            | N/A         | Puts the word `self.' in front of the current symbol.                                                                                                         |
-| `pygen-unselfify-symbol'          | N/A         | Removes the word `self.' from the current symbol (if it exists).                                                                                              |
-| `pygen-toggle-selfify-symbol'     | `C-c C-= .' | Toggles the word `self' in front of the current symbol.                                                                                                       |
-| `pygen-insert-super'              | `C-c C-= u' | Inserts a proper call to the current method in the superclass.  This is basically a wrapper for the built-in `python-mode' function that does the same thing. |
+| Command                           | Keychord          | Description                                                                                                                                                   |
+|-----------------------------------+-------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| =pygen-generate-class=            | =C-c C-\equals c= | Generate a python class from the reference under point.                                                                                                       |
+| =pygen-generate-function=         | =C-c C-\equals f= | Generate a python function from the reference under point.                                                                                                    |
+| =pygen-generate-static-function=  | =C-c C-\equals s= | Generate a static python function from the reference under point.                                                                                             |
+| =pygen-extract-variable=          | =C-c C-\equals v= | Extract the current region into a variable.                                                                                                                   |
+| =pygen-make-keyword-argument=     | =C-c C-\equals k= | Adds a keyword argument to the current function.                                                                                                              |
+| =pygen-make-sequence-argument=    | =C-c C-\equals a= | Adds a sequence argument to the current function.                                                                                                             |
+| =pygen-add-decorator-to-function= | =C-c C-\equals @= | Adds a decorator in front of the current function.                                                                                                            |
+| =pygen-make-static=               | =C-c C-\equals m= | Turns the current function into a static function.                                                                                                            |
+| =pygen-selfify-symbol=            | N/A               | Puts the word =self.= in front of the current symbol.                                                                                                         |
+| =pygen-unselfify-symbol=          | N/A               | Removes the word =self.= from the current symbol (if it exists).                                                                                              |
+| =pygen-toggle-selfify-symbol=     | =C-c C-\equals .= | Toggles the word =self= in front of the current symbol.                                                                                                       |
+| =pygen-insert-super=              | =C-c C-\equals u= | Inserts a proper call to the current method in the superclass.  This is basically a wrapper for the built-in =python-mode= function that does the same thing. |
 
 ** TODO Examples
 :LOGBOOK:
@@ -48,48 +48,48 @@ animated examples of each command.
 
 *** Generating Classes & Functions
 
-`pygen-generate-class' - `C-c C-= c' - Generate a python class from
+=pygen-generate-class= - =C-c C-== c= - Generate a python class from
 the reference under point.
 
-`pygen-generate-function' - `C-c C-= f' - Generate a python function
+=pygen-generate-function= - =C-c C-= f= - Generate a python function
 from the reference under point.
 
-`pygen-generate-static-function' - `C-c C-= s' - Generate a static
+=pygen-generate-static-function= - =C-c C-= s= - Generate a static
 python function from the reference under point.
 
 *** Generating Variables
 
-`pygen-extract-variable' - `C-c C-= v' - Extract the current region
+=pygen-extract-variable= - =C-c C-= v= - Extract the current region
 into a variable.
 
-`pygen-make-keyword-argument' - `C-c C-= k' - Adds a keyword argument
+=pygen-make-keyword-argument= - =C-c C-= k= - Adds a keyword argument
 to the current function.
 
-`pygen-make-sequence-argument' - `C-c C-= a' - Adds a sequence
+=pygen-make-sequence-argument= - =C-c C-= a= - Adds a sequence
 argument to the current function.
 
 *** Automatic Decorators
 
-`pygen-add-decorator-to-function' - `C-c C-= @' - Adds a decorator in
+=pygen-add-decorator-to-function= - =C-c C-= @= - Adds a decorator in
 front of the current function.
 
-`pygen-make-static' - `C-c C-= m' - Turns the current function into a
+=pygen-make-static= - =C-c C-= m= - Turns the current function into a
 static function.
 
 *** Modifying the "self" keyword:
 
-`pygen-selfify-symbol' - Puts the word 'self.' in front of the current
+=pygen-selfify-symbol= - Puts the word =self.= in front of the current
 symbol.
 
-`pygen-toggle-selfify-symbol' - `C-c C-= .' - Toggles the word 'self'
-in front of the current symbol.
+=pygen-toggle-selfify-symbol= - =C-c C-= .= - Toggles the =self.=
+keyword in front of the current symbol.
 
-`pygen-unselfify-symbol' - Removes the word 'self.' from the current
+=pygen-unselfify-symbol= - Removes the word =self.= from the current
 symbol (if it exists).
 
 *** Dynamic Boilerplate Code Generation
 
-`pygen-insert-super' - `C-c C-= u' - Inserts a proper call to the
+=pygen-insert-super= - `C-c C-= u' - Inserts a proper call to the
 current method in the superclass.
 
 * TODO Reformat from elisp quoting to org-mode monospace
