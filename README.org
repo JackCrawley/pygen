@@ -102,7 +102,7 @@ It also works on member functions.
 *** Automatic Decorators
 
 **** pyg
-~C-c C-= @~ - Adds a decorator in front of the current function.en-add-decorator-to-function
+~C-c C-= @~ - Adds a decorator in front of the current function.
 #+CAPTION: ~C-c C-= @~ - Adds a decorator in front of the current function.
 [[./gifs/pygen-add-decorator-to-function.gif]]
 
