@@ -1,15 +1,7 @@
 * Introduction
 
 Pygen is a package that allows the user to automatically generate
-Python code.  This allows programmers to code first and worry about
-implementation details later.
-
-Some of this functionality is implemented by [[https://github.com/python-rope/ropemacs][Ropemacs]]. However,
-Ropemacs is slow and will not work if there are syntax errors in your
-code.  Pymacs is faster and more robust against irrelevant syntax
-errors at the cost of being less precise.  In some situations, it
-won't know where to generate code.  Both packages can be used
-alongside one another.
+Python code.
 
 * TODO Installation
 :LOGBOOK:
@@ -49,6 +41,13 @@ animated examples.
 | =pygen-unselfify-symbol=          | N/A       | Removes the word =self.= from the current symbol (if it exists).                                                                                              |
 | =pygen-toggle-selfify-symbol=     | ~C-c C-= .~ | Toggles the word =self= in front of the current symbol.                                                                                                       |
 | =pygen-insert-super=              | ~C-c C-= u~ | Inserts a proper call to the current method in the superclass.  This is basically a wrapper for the built-in =python-mode= function that does the same thing. |
+
+Some of this functionality is implemented by [[https://github.com/python-rope/ropemacs][Ropemacs]]. However,
+Ropemacs is slow and will not work if there are syntax errors in your
+code.  Pymacs is faster and more robust against syntax errors
+elsewhere in your code. This comes at the cost of being less precise -
+in some situations, it won't know where to generate code.  Both
+packages can be used alongside one another.
 
 ** Examples
 
