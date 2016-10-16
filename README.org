@@ -26,9 +26,9 @@ Pygen leverages [[https://github.com/jorgenschaefer/elpy][Elpy]] and [[https://l
 =python-mode= is not the default Python mode but a separate package.
 The default package is =python.el=.
 
-Pygen won't work with a Python setup unless python-mode is
-installed and Elpy is active. However, the variable
-=pygen-navigate-to-definition-command= has been added to allow elpy to
+Pygen won't work with a Python setup unless python-mode is installed
+and Elpy is active. However, the variable
+=pygen-navigate-to-definition-command= has been added to allow Elpy to
 be disabled - if you have another command that allows Pygen to
 navigate to function definitions.
 
