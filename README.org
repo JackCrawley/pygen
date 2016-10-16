@@ -36,7 +36,6 @@ variable =pygen-navigate-to-definition-command= to a different
 functions.
 
 * Commands
-The
 It provides the following code generation commands.  Scroll down for
 animated examples.
 
@@ -61,40 +60,49 @@ Note that these examples are still being developed.
 *** Generating Classes & Functions
 
 **** pygen-generate-class
+~C-c C-= c~ - Generate a python class from the reference under point.
 #+CAPTION: ~C-c C-= c~ - Generate a python class from the reference under point.
 [[./gifs/pygen-generate-class.gif]]
 
+It also works on member classes.
 #+CAPTION: It also works on member classes.
 [[./gifs/pygen-generate-class-self.gif]]
 
 **** pygen-generate-function
+~C-c C-= f~ - Generate a python function from the reference under point.
 #+CAPTION: ~C-c C-= f~ - Generate a python function from the reference under point.
 [[./gifs/pygen-generate-function.gif]]
 
+It also works on member functions.
 #+CAPTION: It also works on member functions.
 [[./gifs/pygen-generate-function-self.gif]]
 
 **** pygen-generate-static-function
+~C-c C-= s~ - Generate a static python function from the reference under point.
 #+CAPTION: ~C-c C-= s~ - Generate a static python function from the reference under point.
 [[./gifs/pygen-generate-static-function.gif]]
 
 *** Generating Variables
 
 **** pygen-extract-variable
+~C-c C-= v~ - Extract the current region into a variable.
 #+CAPTION: ~C-c C-= v~ - Extract the current region into a variable.
 [[./gifs/pygen-extract-variable.gif]]
 
 **** pygen-make-keyword-argument
+~C-c C-= k~ - Adds a keyword argument to the current function.
 #+CAPTION: ~C-c C-= k~ - Adds a keyword argument to the current function.
 [[./gifs/pygen-make-keyword-argument.gif]]
 
 **** pygen-make-sequence-argument
+~C-c C-= a~ - Adds a sequence argument to the current function.
 #+CAPTION: ~C-c C-= a~ - Adds a sequence argument to the current function.
 [[./gifs/pygen-make-sequence-argument.gif]]
 
 *** Automatic Decorators
 
-**** pygen-add-decorator-to-function
+**** pyg
+~C-c C-= @~ - Adds a decorator in front of the current function.en-add-decorator-to-function
 #+CAPTION: ~C-c C-= @~ - Adds a decorator in front of the current function.
 [[./gifs/pygen-add-decorator-to-function.gif]]
 
@@ -107,11 +115,13 @@ Puts the word =self.= in front of the current symbol.
 Removes the word =self.= from the current symbol (if it exists).
 
 **** pygen-toggle-selfify-symbol
+~C-c C-= .~ - Toggles the =self.= keyword in front of the current symbol.
 #+CAPTION: ~C-c C-= .~ - Toggles the =self.= keyword in front of the current symbol.
 [[./gifs/pygen-toggle-selfify-symbol.gif]]
 
 *** Dynamic Boilerplate Code Generation
 
 **** pygen-insert-super
+~C-c C-= u~ - Inserts a proper call to the current method in the superclass.
 #+CAPTION: ~C-c C-= u~ - Inserts a proper call to the current method in the superclass.
 [[./gifs/pygen-insert-super.gif]]
