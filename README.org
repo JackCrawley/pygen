@@ -28,8 +28,8 @@ animated examples of each command.
 
 | Command                           | Keychord    | Description                                                                                                                                                   |
 |-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| =pygen-generate-class=            | =C-c C-= c= | Generate a python class from the reference under point.                                                                                                       |
-| =pygen-generate-function=         | =C-c C-= f= | Generate a python function from the reference under point.                                                                                                    |
+| =pygen-generate-class=            | =C-c C-=== c= | Generate a python class from the reference under point.                                                                                                       |
+| =pygen-generate-function=         | =C-c C-== f= | Generate a python function from the reference under point.                                                                                                    |
 | =pygen-generate-static-function=  | =C-c C-= s= | Generate a static python function from the reference under point.                                                                                             |
 | =pygen-extract-variable=          | =C-c C-= v= | Extract the current region into a variable.                                                                                                                   |
 | =pygen-make-keyword-argument=     | =C-c C-= k= | Adds a keyword argument to the current function.                                                                                                              |
