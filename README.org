@@ -1,25 +1,24 @@
 * Introduction
 
 Pygen is a package that allows the user to automatically generate
-Python code.  This allows programmers to code first, and worry about
-further implementation later.
+Python code.  This allows programmers to code first and worry about
+implementation details later.
 
 * Dependencies
 
-Pygen leverages `elpy' and `python-mode'.  That's the package called
-`python-mode', not just the mode.  As of Emacs 24.5.1, `python-mode'
+Pygen leverages [[https://github.com/jorgenschaefer/elpy][Elpy]] and [[https://launchpad.net/python-mode][python-mode]].  That's the package called
+=python-mode=, just the mode.  As of Emacs 24.5.1, =python-mode=
 is not the default Python mode but a separate package.  The default
-package is called `python'.
+package is =python.el=.
 
-Pygen won't work with a Python setup unless `python-mode' is
-installed.  However, it can work with a setup that doesn't include
-Elpy.  You just need to tell it how to navigate to function and class
-definitions.  By default, this is handled by the command
-`elpy-goto-definition' to navigate to definitions and the command
-`pop-tag-mark'.  If you use a different system to navigate through
-python code, you can set the variables
-`pygen-navigate-to-definition-command' and `pygen-go-back-command' to
-different functions.
+Pygen won't work with a Python setup unless python-mode is installed.
+However, it can work with a setup that doesn't include Elpy.  You just
+need to tell it how to navigate to function and class definitions.  By
+default, this is handled by the command =elpy-goto-definition= to
+navigate to definitions and the command =pop-tag-mark=.  If you use a
+different system to navigate through python code, you can set the
+variables =pygen-navigate-to-definition-command= and
+=pygen-go-back-command= to different functions.e
 
 * Commands
 
@@ -40,7 +39,6 @@ animated examples of each command.
 | =pygen-unselfify-symbol=          | N/A       | Removes the word =self.= from the current symbol (if it exists).                                                                                              |
 | =pygen-toggle-selfify-symbol=     | ~C-c C-= .~ | Toggles the word =self= in front of the current symbol.                                                                                                       |
 | =pygen-insert-super=              | ~C-c C-= u~ | Inserts a proper call to the current method in the superclass.  This is basically a wrapper for the built-in =python-mode= function that does the same thing. |
-| <33>                              | <9>       |                                                                                                                                                               |
 
 ** TODO Examples
 :LOGBOOK:
