@@ -55,8 +55,6 @@ animated examples.
 
 ** Examples
 
-Note that these examples are still being developed.
-
 *** Generating Classes & Functions
 
 **** pygen-generate-class
