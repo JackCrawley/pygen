@@ -7,9 +7,9 @@ implementation details later.
 * Dependencies
 
 Pygen leverages [[https://github.com/jorgenschaefer/elpy][Elpy]] and [[https://launchpad.net/python-mode][python-mode]].  That's the package called
-=python-mode=, just the mode.  As of Emacs 24.5.1, =python-mode=
-is not the default Python mode but a separate package.  The default
-package is =python.el=.
+=python-mode= - not the mode itself.  As of Emacs 24.5.1,
+=python-mode= is not the default Python mode but a separate package.
+The default package is =python.el=.
 
 Pygen won't work with a Python setup unless python-mode is installed.
 However, it can work with a setup that doesn't include Elpy.  You just
@@ -44,6 +44,8 @@ animated examples of each command.
 :LOGBOOK:
 - State "TODO"       from              [2016-10-16 Sun 02:52]
 :END:
+
+Note that these examples are still being developed.
 
 *** Generating Classes & Functions
 
