@@ -4,6 +4,14 @@ Pygen is a package that allows the user to automatically generate
 Python code.  This allows programmers to code first and worry about
 implementation details later.
 
+* TODO Installation
+:LOGBOOK:
+- State "TODO"       from              [2016-10-16 Sun 17:54]
+:END:
+
+This section still needs to be completed. Installation should shortly
+be available on MELPA.
+
 * Dependencies
 
 Pygen leverages [[https://github.com/jorgenschaefer/elpy][Elpy]] and [[https://launchpad.net/python-mode][python-mode]].  That's the package called
@@ -17,8 +25,8 @@ need to tell it how to navigate to function and class definitions.  By
 default, this is handled by the command =elpy-goto-definition= to
 navigate to definitions and the command =pop-tag-mark=.  If you use a
 different system to navigate through python code, you can set the
-variables =pygen-navigate-to-definition-command= and
-=pygen-go-back-command= to different functions.e
+variable =pygen-navigate-to-definition-command= to a different
+functions.
 
 * Commands
 
