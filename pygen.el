@@ -159,7 +159,6 @@
   (when (not bounds)
 	(setq bounds (pygen-get-expression-bounds)))
   ;; TODO: verify the current expression
-  
   t)
 
 
@@ -321,8 +320,6 @@ extract some kind of meaningful argument."
 			;; First search for comma separated arguments.
 			(setq previous-position (point))
 			(while (re-search-forward "[^ \n\t\\\\].*," nil t)
-			  ;; TODO: format the variable; trim whitespace and extract
-			  ;; potential equals symbols.
 			  (let (current-argument)
 				(setq current-argument (buffer-substring-no-properties previous-position (1- (point))))
 				(setq current-argument (pygen-parse-single-argument current-argument))
@@ -331,7 +328,6 @@ extract some kind of meaningful argument."
 				  (setq previous-position (point)))))
 			;; Now search the last, non-comma separated argument.
 			(setq last-argument (buffer-substring-no-properties (point) (point-max)))
-			;; TODO: Parse last argument
 			(setq last-argument (pygen-parse-single-argument last-argument))
 			(when last-argument
 				(push last-argument arguments))
