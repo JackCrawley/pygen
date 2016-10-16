@@ -26,14 +26,11 @@ Pygen leverages [[https://github.com/jorgenschaefer/elpy][Elpy]] and [[https://l
 =python-mode= is not the default Python mode but a separate package.
 The default package is =python.el=.
 
-Pygen won't work with a Python setup unless python-mode is installed.
-However, it can work with a setup that doesn't include Elpy.  You just
-need to tell it how to navigate to function and class definitions.  By
-default, this is handled by the command =elpy-goto-definition= to
-navigate to definitions and the command =pop-tag-mark=.  If you use a
-different system to navigate through python code, you can set the
-variable =pygen-navigate-to-definition-command= to a different
-functions.
+Pygen won't work with a Python setup unless python-mode is
+installed and Elpy is active. However, the variable
+=pygen-navigate-to-definition-command= has been added to allow elpy to
+be disabled - if you have another command that allows Pygen to
+navigate to function definitions.
 
 * Commands
 It provides the following code generation commands.  Scroll down for

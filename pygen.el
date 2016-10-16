@@ -68,7 +68,7 @@
 ;; the current function.
 
 ;; `pygen-make-static' - Turns the current function into a static
-;; function.
+;; function.  WARNING: Not currently functional.
 
 ;; Modifying the "self" keyword:
 ;; -----------------------------
