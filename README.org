@@ -4,6 +4,13 @@ Pygen is a package that allows the user to automatically generate
 Python code.  This allows programmers to code first and worry about
 implementation details later.
 
+Some of this functionality is implemented by [[https://github.com/python-rope/ropemacs][Ropemacs]]. However,
+Ropemacs is slow and will not work if there are syntax errors in your
+code.  Pymacs is faster and more robust against irrelevant syntax
+errors at the cost of being less precise.  In some situations, it
+won't know where to generate code.  Both packages can be used
+alongside one another.
+
 * TODO Installation
 :LOGBOOK:
 - State "TODO"       from              [2016-10-16 Sun 17:54]
@@ -29,9 +36,9 @@ variable =pygen-navigate-to-definition-command= to a different
 functions.
 
 * Commands
-
-It provides the following code generation commands.  Below are
-animated examples of each command.
+The
+It provides the following code generation commands.  Scroll down for
+animated examples.
 
 | Command                           | Keychord  | Description                                                                                                                                                   |
 |-----------------------------------+-----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -42,61 +49,69 @@ animated examples of each command.
 | =pygen-make-keyword-argument=     | ~C-c C-= k~ | Adds a keyword argument to the current function.                                                                                                              |
 | =pygen-make-sequence-argument=    | ~C-c C-= a~ | Adds a sequence argument to the current function.                                                                                                             |
 | =pygen-add-decorator-to-function= | ~C-c C-= @~ | Adds a decorator in front of the current function.                                                                                                            |
-| =pygen-make-static=               | ~C-c C-= m~ | Turns the current function into a static function.                                                                                                            |
 | =pygen-selfify-symbol=            | N/A       | Puts the word =self.= in front of the current symbol.                                                                                                         |
 | =pygen-unselfify-symbol=          | N/A       | Removes the word =self.= from the current symbol (if it exists).                                                                                              |
 | =pygen-toggle-selfify-symbol=     | ~C-c C-= .~ | Toggles the word =self= in front of the current symbol.                                                                                                       |
 | =pygen-insert-super=              | ~C-c C-= u~ | Inserts a proper call to the current method in the superclass.  This is basically a wrapper for the built-in =python-mode= function that does the same thing. |
 
-** TODO Examples
-:LOGBOOK:
-- State "TODO"       from              [2016-10-16 Sun 02:52]
-:END:
+** Examples
 
 Note that these examples are still being developed.
 
 *** Generating Classes & Functions
 
-=pygen-generate-class= - ~C-c C-= c~ - Generate a python class from
-the reference under point.
+**** pygen-generate-class
+#+CAPTION: ~C-c C-= c~ - Generate a python class from the reference under point.
+[[./gifs/pygen-generate-class.gif]]
 
-=pygen-generate-function= - ~C-c C-= f~ - Generate a python function
-from the reference under point.
+#+CAPTION: It also works on member classes.
+[[./gifs/pygen-generate-class-self.gif]]
 
-=pygen-generate-static-function= - ~C-c C-= s~ - Generate a static
-python function from the reference under point.
+**** pygen-generate-function
+#+CAPTION: ~C-c C-= f~ - Generate a python function from the reference under point.
+[[./gifs/pygen-generate-function.gif]]
+
+#+CAPTION: It also works on member functions.
+[[./gifs/pygen-generate-function-self.gif]]
+
+**** pygen-generate-static-function
+#+CAPTION: ~C-c C-= s~ - Generate a static python function from the reference under point.
+[[./gifs/pygen-generate-static-function.gif]]
 
 *** Generating Variables
 
-=pygen-extract-variable= - ~C-c C-= v~ - Extract the current region
-into a variable.
+**** pygen-extract-variable
+#+CAPTION: ~C-c C-= v~ - Extract the current region into a variable.
+[[./gifs/pygen-extract-variable.gif]]
 
-=pygen-make-keyword-argument= - ~C-c C-= k~ - Adds a keyword argument
-to the current function.
+**** pygen-make-keyword-argument
+#+CAPTION: ~C-c C-= k~ - Adds a keyword argument to the current function.
+[[./gifs/pygen-make-keyword-argument.gif]]
 
-=pygen-make-sequence-argument= - ~C-c C-= a~ - Adds a sequence
-argument to the current function.
+**** pygen-make-sequence-argument
+#+CAPTION: ~C-c C-= a~ - Adds a sequence argument to the current function.
+[[./gifs/pygen-make-sequence-argument.gif]]
 
 *** Automatic Decorators
 
-=pygen-add-decorator-to-function= - ~C-c C-= @~ - Adds a decorator in
-front of the current function.
-
-=pygen-make-static= - ~C-c C-= m~ - Turns the current function into a
-static function.
+**** pygen-add-decorator-to-function
+#+CAPTION: ~C-c C-= @~ - Adds a decorator in front of the current function.
+[[./gifs/pygen-add-decorator-to-function.gif]]
 
 *** Modifying the "self" keyword:
 
-=pygen-selfify-symbol= - Puts the word =self.= in front of the current
-symbol.
+**** pygen-selfify-symbol
+Puts the word =self.= in front of the current symbol.
 
-=pygen-toggle-selfify-symbol= - ~C-c C-= .~ - Toggles the =self.=
-keyword in front of the current symbol.
+**** pygen-unselfify-symbol
+Removes the word =self.= from the current symbol (if it exists).
 
-=pygen-unselfify-symbol= - Removes the word =self.= from the current
-symbol (if it exists).
+**** pygen-toggle-selfify-symbol
+#+CAPTION: ~C-c C-= .~ - Toggles the =self.= keyword in front of the current symbol.
+[[./gifs/pygen-toggle-selfify-symbol.gif]]
 
 *** Dynamic Boilerplate Code Generation
 
-=pygen-insert-super= - ~C-c C-= u~ - Inserts a proper call to the
-current method in the superclass.
+**** pygen-insert-super
+#+CAPTION: ~C-c C-= u~ - Inserts a proper call to the current method in the superclass.
+[[./gifs/pygen-insert-super.gif]]
