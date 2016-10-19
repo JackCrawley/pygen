@@ -789,6 +789,21 @@ after all imports."
 		insertion-position)
 	(goto-char (point-min))
 	(save-excursion
+	  ;; FIXME: bracketed imports break this.
+
+	  ;; The search forward command for imports is not very
+	  ;; durable. When using the following kind of import it breaks:
+
+	  ;; from module import (
+	  ;;     things
+	  ;; )
+
+	  ;; and inserts the defun inside the brackets. Reading the
+	  ;; regular expression, it may also break if a non-standard
+	  ;; number of whitespace characters exists between keywords.
+
+	  ;; brackets are pairs, so maybe regular expressions arent up to
+	  ;; this?
 	  (while (re-search-forward
 			  "import *[A-Za-z_][A-Za-z_0-9].*\\|^from +[A-Za-z_][A-Za-z_0-9.]+ +import .*" nil t)
 		nil)
