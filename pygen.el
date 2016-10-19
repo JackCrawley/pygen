@@ -1339,6 +1339,10 @@ GitHub repo for this project."
 	(run-hooks pygen-mode-hook)))
 
 
+;; TODO: generating constants?
+
+;; TODO: pygen-make-star-argument
+
 ;; TODO: Make all these commands fully compatible with star arguments
 ;; (*args, **kwargs).
 
