@@ -5,7 +5,7 @@
 ;; Author: Jack Crawley <http://www.github.com/jackcrawley>
 ;; Keywords: python, code generation
 ;; Version: 0.1
-;; Package-Requires: ((elpy "1.12.0") (python-mode "))
+;; Package-Requires: ((elpy "1.12.0") (python-mode "0"))
 ;; URL: 
 ;; TODO: Input URL
 
