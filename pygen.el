@@ -1370,6 +1370,8 @@ GitHub repo for this project."
 
 ;; TODO: Implement suggestions from the Melpa guys
 
+;; TODO: Change keybindings ("C-=" is not available on some terminals)
+
 
 (provide 'pygen)
 ;;; pygen.el ends here
