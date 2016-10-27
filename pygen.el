@@ -1366,6 +1366,10 @@ GitHub repo for this project."
 ;; TODO: Possibly have a verification function when pygen commands are
 ;; called to ensure the required packages are installed?
 
+;; TODO: Add Hydra
+
+;; TODO: Implement suggestions from the Melpa guys
+
 
 (provide 'pygen)
 ;;; pygen.el ends here
