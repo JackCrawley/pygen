@@ -1372,6 +1372,9 @@ GitHub repo for this project."
 
 ;; TODO: Change keybindings ("C-=" is not available on some terminals)
 
+;; FIXME: Can't generate function eif it looks like the following:
+;;        variable = Class(function_name)
+
 
 (provide 'pygen)
 ;;; pygen.el ends here
