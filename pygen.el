@@ -1372,7 +1372,7 @@ GitHub repo for this project."
 
 ;; TODO: Change keybindings ("C-=" is not available on some terminals)
 
-;; FIXME: Can't generate function eif it looks like the following:
+;; FIXME: Can't generate function if it looks like the following:
 ;;        variable = Class(function_name)
 
 
