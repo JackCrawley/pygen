@@ -661,15 +661,15 @@ can take time, so it's optimal to only do it once.
   ;; Now check if the parent is self
   (save-excursion
 	(if has-parent
-		(let (end-position)
+		(progn
 		  (goto-char (car bounds))
 		  (left-char)
-		  (setq end-position (point))
-		  (py-backward-partial-expression)
-		  (if (string= (buffer-substring-no-properties (point) end-position)
-					   "self")
-			  t
-			nil))
+		  (let ((end-position (point)))
+			(py-backward-partial-expression)
+			(if (string= (buffer-substring-no-properties (point) end-position)
+						 "self")
+				t
+			  nil)))
 	  nil)))
 
 
