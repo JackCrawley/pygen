@@ -546,19 +546,16 @@ can take time, so it's optimal to only do it once.
 
 
 (defun pygen-add-sequence-argument-internal (argument)
-  "Add a sequence argument to the current functions definition."
-  (let (start-position
-		end-position
-		(star-args-present nil)
-		first-star-argument)
-	(when (not (pygen-def-at-point))
-	  (error "Error: not currently in a def."))
-	(when (pygen-argument-already-exists argument)
-	  (error "Error: the argument `%s' already already exists in the function definition."
-			 argument))
-	(py-beginning-of-def-or-class)
-	(search-forward "(")
-	(setq start-position (point))
+  "Add a sequence argument to the current functions definition." 
+  (when (not (pygen-def-at-point))
+	(error "Error: not currently in a def."))
+  (when (pygen-argument-already-exists argument)
+	(error "Error: the argument `%s' already already exists in the function definition."
+		   argument))
+  (py-beginning-of-def-or-class)
+  (search-forward "(")
+  (let ((start-position (point))
+		end-position)
 	(left-char)
 	(forward-sexp)
 	(setq end-position (- (point) 1))
@@ -595,22 +592,24 @@ can take time, so it's optimal to only do it once.
 		;; Keyword arguments don't exist, so check for star arguments
 		;; next.
 		(goto-char end-position)
-		(while (search-backward "*" start-position t)
-		  (when (not (in-string-p))
-			(setq star-args-present t)
-			(setq first-star-argument (point))))
-		(if star-args-present
-			(progn
-			  (goto-char first-star-argument)
-			  (insert (concat argument ", ")))
-		  (goto-char start-position)
-		  ;; If other arguments exist, a comma must be added.
-		  (if (re-search-forward "[A-Za-z0-9_*]" end-position t)
+		(let ((star-args-present nil)
+			  first-star-argument)
+		  (while (search-backward "*" start-position t)
+			(when (not (in-string-p))
+			  (setq star-args-present t)
+			  (setq first-star-argument (point))))
+		  (if star-args-present
 			  (progn
-				;; TODO: If star args, put before them.
-				(goto-char end-position)
-				(insert (concat ", " argument)))
-			(insert argument)))))))
+				(goto-char first-star-argument)
+				(insert (concat argument ", ")))
+			(goto-char start-position)
+			;; If other arguments exist, a comma must be added.
+			(if (re-search-forward "[A-Za-z0-9_*]" end-position t)
+				(progn
+				  ;; TODO: If star args, put before them.
+				  (goto-char end-position)
+				  (insert (concat ", " argument)))
+			  (insert argument))))))))
 
 
 (defun pygen-expression-exists (&optional bounds verified)
