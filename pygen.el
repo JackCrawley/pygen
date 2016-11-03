@@ -298,10 +298,7 @@ extract some kind of meaningful argument."
   ;; Now get expression arguments
   (save-excursion
 	(let ((arguments-string (pygen-get-expression-arguments-string bounds verified))
-		  arguments
-		  current-start
-		  previous-position
-		  last-argument)
+		  (arguments '()))
 	  (if arguments-string
 		  (with-temp-buffer
 			(insert arguments-string)
@@ -312,25 +309,25 @@ extract some kind of meaningful argument."
 			(save-excursion
 			  (while (re-search-forward "[([{\"]" nil t)
 				(left-char 1)
-				(setq current-start (point))
-				(forward-sexp)
-				(delete-region current-start (point))
-				(insert "")))
+				(let ((current-start (point)))
+				  (forward-sexp)
+				  (delete-region current-start (point))
+				  (insert ""))))
 			;; Now repeatedly try to find arguments.
 			;; First search for comma separated arguments.
-			(setq previous-position (point))
-			(while (re-search-forward "[^ \n\t\\\\].*," nil t)
-			  (let (current-argument)
-				(setq current-argument (buffer-substring-no-properties previous-position (1- (point))))
-				(setq current-argument (pygen-parse-single-argument current-argument))
-				(when current-argument
-				  (push current-argument arguments)
-				  (setq previous-position (point)))))
+			(let ((previous-position (point)))
+			  (while (re-search-forward "[^ \n\t\\\\].*," nil t)
+				(let (current-argument)
+				  (setq current-argument (buffer-substring-no-properties previous-position (1- (point))))
+				  (setq current-argument (pygen-parse-single-argument current-argument))
+				  (when current-argument
+					(push current-argument arguments)
+					(setq previous-position (point))))))
 			;; Now search the last, non-comma separated argument.
-			(setq last-argument (buffer-substring-no-properties (point) (point-max)))
-			(setq last-argument (pygen-parse-single-argument last-argument))
-			(when last-argument
-				(push last-argument arguments))
+			(let* ((unparsed-argument (buffer-substring-no-properties (point) (point-max)))
+				   (last-argument (pygen-parse-single-argument unparsed-argument)))
+			  (when last-argument
+				(push last-argument arguments)))
 			(when arguments
 			  (reverse arguments)))
 		nil))))
