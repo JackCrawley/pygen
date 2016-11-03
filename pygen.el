@@ -347,54 +347,49 @@ function definition.
 
 WARNING: Does not work with star arguments."
   (let ((arguments '())
-		(individual-arguments-strings '())
-		last-position)
+		(individual-arguments-strings '()))
 	(with-temp-buffer
 	  (insert arguments-string)
 	  (message "")
 	  (goto-char 1)
-	  (setq last-position (point))
-	  (while (search-forward "," nil t)
-		(when (not (in-string-p))
-		  (push (buffer-substring-no-properties last-position (- (point) 1)) individual-arguments-strings)
-		  (setq last-position (point))))
-	  (when (re-search-forward "[A-Za-z0-9_*]" nil t)
-		(setq last-position (- (point) 1))
-		(push (buffer-substring-no-properties last-position (point-max)) individual-arguments-strings)))
+	  (let ((last-position (point)))
+		(while (search-forward "," nil t)
+		  (when (not (in-string-p))
+			(push (buffer-substring-no-properties last-position (- (point) 1)) individual-arguments-strings)
+			(setq last-position (point))))
+		(when (re-search-forward "[A-Za-z0-9_*]" nil t)
+		  (setq last-position (- (point) 1))
+		  (push (buffer-substring-no-properties last-position (point-max)) individual-arguments-strings))))
 	(while individual-arguments-strings
 	  (with-temp-buffer
-		(let (argument
-			  value
-			  start-position
+		(let (start-position
 			  end-position)
 		  (insert " ")
 		  (insert (pop individual-arguments-strings))
 		  (insert " ")
 		  (goto-char 1)
 		  ;; First get argument, then get default value.
-		  (if (re-search-forward "[A-Za-z0-9_*]" nil t)
-			  (progn
-				(left-char)
-				(setq start-position (point))
-				(if (re-search-forward "[^A-Za-z0-9_*]" nil t)
-					(setq argument
-						  (buffer-substring-no-properties start-position (- (point) 1)))
-				  (error "Error: malformed function definition. Comma was found with no argument before it.")))
-			(error "Error: malformed function definition. Comma was found with no argument before it."))
-		  (left-char)
-		  (if (search-forward "=" nil t)
-			  (progn
-				(setq value
-					  (buffer-substring-no-properties (point) (point-max)))
-				(setq value (pygen-chomp-whitespace value)))
-			(setq value nil))
-		  (push (cons argument value) arguments))))
+		  (let (argument)
+			(if (re-search-forward "[A-Za-z0-9_*]" nil t)
+				(progn
+				  (left-char)
+				  (setq start-position (point))
+				  (if (re-search-forward "[^A-Za-z0-9_*]" nil t)
+					  (setq argument
+							(buffer-substring-no-properties start-position (- (point) 1)))
+					(error "Error: malformed function definition. Comma was found with no argument before it.")))
+			  (error "Error: malformed function definition. Comma was found with no argument before it."))
+			(left-char)
+			(let ((value (if (search-forward "=" nil t)
+							 (progn
+							   (pygen-chomp-whitespace (buffer-substring-no-properties (point) (point-max))))
+						   nil)))
+			  (push (cons argument value) arguments))))))
 	arguments))
 
 
 (defun pygen-get-def-arguments (&optional in-function)
   "Get a list of arguments in the current defun.
-
 Returns a list of (`argument' . `default-value') pairs.
 Arguments with no default value have a default value of nil.
 
@@ -402,24 +397,22 @@ Arguments with no default value have a default value of nil.
 performed to see whether the point is in a function.  This check
 can take time, so it's optimal to only do it once."
   (save-excursion
-	(let (start-position
-		  end-position
-		  arguments-string)
+	(let (arguments-string)
 	  (when (not in-function)
 		(when (not (pygen-def-at-point))
 		  (error "Error: not currently in a def.")))
 	  (py-beginning-of-def-or-class)
 	  (search-forward "(")
 	  (left-char)
-	  (setq start-position (1+ (point)))
-	  ;; TODO: Replace this with a more durable navigation function
-	  ;; `forward-sexp' isn't going to work if the definition of an
-	  ;; s-expression changes.
-	  (forward-sexp)
-	  (setq end-position (1- (point)))
-	  (setq arguments-string
-			(buffer-substring-no-properties start-position end-position))
-	  (pygen-extract-function-arguments-from-string arguments-string))))
+	  (let ((start-position (1+ (point))))
+		;; TODO: Replace this with a more durable navigation function
+		;; `forward-sexp' isn't going to work if the definition of an
+		;; s-expression changes.
+		(forward-sexp)
+		(let* ((end-position (1- (point)))
+			   (arguments-string
+				(buffer-substring-no-properties start-position end-position)))
+		  (pygen-extract-function-arguments-from-string arguments-string))))))
 
 
 (defun pygen-def-at-point ()
