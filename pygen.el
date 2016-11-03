@@ -856,16 +856,14 @@ provided, the user will be prompted for a name.
 
 `DECORATORS' - a list of decorator strings to add before the
 function.  Leave this as nil if no decorators should be added."
-  (let (start-position
-		indentation-start
-		indentation-end
-		indentation-string
-		end-position
-		(static-function nil))
-	(push-mark nil t)
-	(setq start-position (point))
-	(py-beginning-of-class)
-	(setq indentation-end (point))
+  (push-mark nil t)
+  (py-beginning-of-class)
+  (let* ((indentation-end (point))
+		 (indentation-start (save-excursion
+							  (beginning-of-line)
+							  (point)))
+		 (indentation-string (buffer-substring-no-properties
+							  indentation-start indentation-end)))
 	(beginning-of-line)
 	(setq indentation-start (point))
 	(setq indentation-string
@@ -875,23 +873,24 @@ function.  Leave this as nil if no decorators should be added."
 	(insert "\n\n")
 
 	;; Now insert decorators
-	(while decorators
-	  (let ((current-decorator (pop decorators)))
-		(insert indentation-string)
-		(insert current-decorator)
-		(py-shift-indent-right)
-		(when (string= current-decorator "@staticmethod")
-		  (setq static-function t))
-		(insert "\n")))
-	;; Insert function itself
-	(insert indentation-string)
-	(when (not function-name)
-	  (setq function-name (read-string "Enter function name: ")))
-	(insert (concat "def " function-name "("))
-	(when (not static-function)
-	  (insert "self")
-	  (when arguments
-		(insert ", ")))
+	(let ((static-function nil))
+	  (while decorators
+		(let ((current-decorator (pop decorators)))
+		  (insert indentation-string)
+		  (insert current-decorator)
+		  (py-shift-indent-right)
+		  (when (string= current-decorator "@staticmethod")
+			(setq static-function t))
+		  (insert "\n")))
+	  ;; Insert function itself
+	  (insert indentation-string)
+	  (when (not function-name)
+		(setq function-name (read-string "Enter function name: ")))
+	  (insert (concat "def " function-name "("))
+	  (when (not static-function)
+		(insert "self")
+		(when arguments
+		  (insert ", "))))
 	(while arguments
 	  (let ((argument (pop arguments)))
 		(if arguments
@@ -900,9 +899,11 @@ function.  Leave this as nil if no decorators should be added."
 	(insert "):")
 	(py-shift-indent-right)
 	(py-newline-and-indent)
-	(setq end-position (point))
-	;; (insert "pass")
-	(goto-char end-position)))
+
+	(let ((end-position (point)))
+	  ;; Dummy function contents. Easier to just leave this out.
+	  ;; (insert "pass")
+	  (goto-char end-position))))
 
 
 (defun pygen-create-new-class-in-class (arguments &optional class-name)
