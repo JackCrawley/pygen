@@ -491,22 +491,19 @@ can take time, so it's optimal to only do it once.
 
 (defun pygen-add-keyword-argument-internal (argument)
   "Add a keyword argument to the current function's definition."
-  (let (start-position
-		end-position
-		(star-args-present nil)
-		first-star-argument)
-	(when (not (pygen-def-at-point))
-	  (error "Error: not currently in a def."))
-	(when (pygen-argument-already-exists argument t)
-	  (error "Error: the argument `%s' already already exists in the function definition."
-			 argument))
-	(py-beginning-of-def-or-class)
-	(search-forward "(")
-	(setq start-position (point))
+  (when (not (pygen-def-at-point))
+	(error "Error: not currently in a def."))
+  (when (pygen-argument-already-exists argument t)
+	(error "Error: the argument `%s' already already exists in the function definition."
+		   argument))
+  
+  (py-beginning-of-def-or-class)
+  (search-forward "(")
+  (let ((start-position (point))
+		end-position)
 	(left-char)
 	(forward-sexp)
 	(setq end-position (- (point) 1))
-
 	;; "self" is a special keyword that should always be inserted at
 	;; the start of the definition.
 	(if (string= (downcase argument) "self")
@@ -522,28 +519,30 @@ can take time, so it's optimal to only do it once.
 	  
 	  ;; Check if any star arguments exist
 	  (goto-char end-position)
-	  (while (search-backward "*" start-position t)
-		(when (not (in-string-p))
-		  (setq star-args-present t)
-		  (setq first-star-argument (point))))
-	  ;; If another argument already exists, argument must be inserted
-	  ;; with a comma. Otherwise, just insert it.
-	  (if star-args-present
-		  (progn
-			(goto-char first-star-argument)
-			(if (search-backward "," start-position t)
-				(progn
-				  (right-char)
-				  (insert (concat " " argument "=,"))
-				  (left-char))
-			  (insert (concat argument "=, "))
-			  (left-char 2)))
-		(goto-char end-position)
-		(if (re-search-backward "[^ \t\n\\\\]" start-position t)
+	  (let ((star-args-present nil)
+			first-star-argument) 
+		(while (search-backward "*" start-position t)
+		  (when (not (in-string-p))
+			(setq star-args-present t)
+			(setq first-star-argument (point))))
+		;; If another argument already exists, argument must be inserted
+		;; with a comma. Otherwise, just insert it.
+		(if star-args-present
 			(progn
-			  (right-char)
-			  (insert (concat ", " argument "=")))
-		  (insert argument "="))))))
+			  (goto-char first-star-argument)
+			  (if (search-backward "," start-position t)
+				  (progn
+					(right-char)
+					(insert (concat " " argument "=,"))
+					(left-char))
+				(insert (concat argument "=, "))
+				(left-char 2)))
+		  (goto-char end-position)
+		  (if (re-search-backward "[^ \t\n\\\\]" start-position t)
+			  (progn
+				(right-char)
+				(insert (concat ", " argument "=")))
+			(insert argument "=")))))))
 
 
 (defun pygen-add-sequence-argument-internal (argument)
