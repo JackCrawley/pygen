@@ -623,33 +623,30 @@ can take time, so it's optimal to only do it once.
   ;; TODO: Optimise this. Find a faster method of checking if it exists.
   ;;       Perhaps if flycheck is open, use that?
   (save-excursion
-	(let (start-position
-		  start-buffer
-		  goto-char
-		  return-value)
+	(let ((expression-exists nil))
 	  (goto-char (car bounds))
-	  (setq start-position (point))
-	  (setq start-buffer (current-buffer))
-	  (condition-case error-variable
-		  (progn 
-			(funcall pygen-navigate-to-definition-command)
-			(setq return-value t)
-			(condition-case nil
-				(tags-loop-continue)
-			  (error
-			   (message "Warning: could not return to previous position. Manually reverting.")
-			   (switch-to-buffer start-buffer)
-			   (goto-char start-position))))
-		(error
-		 (message "Pygen could not navigate to the parent of this expression.")
-		 (if (not (string-match "No definition found" (error-message-string error-variable)))
-			 (progn
-			   (message (concat "Miscellaneous error. Perhaps try "
-								"calling the same command again. "
-								"Original error:"))
-			   error-variable)
-		   nil)))
-	  return-value)))
+	  (let ((start-position (point))
+			(start-buffer (current-buffer)))
+		(condition-case error-variable
+			(progn 
+			  (funcall pygen-navigate-to-definition-command)
+			  (setq expression-exists t)
+			  (condition-case nil
+				  (tags-loop-continue)
+				(error
+				 (message "Warning: could not return to previous position. Manually reverting.")
+				 (switch-to-buffer start-buffer)
+				 (goto-char start-position))))
+		  (error
+		   (message "Pygen could not navigate to the parent of this expression.")
+		   (if (not (string-match "No definition found" (error-message-string error-variable)))
+			   (progn
+				 (message (concat "Miscellaneous error. Perhaps try "
+								  "calling the same command again. "
+								  "Original error:"))
+				 error-variable)
+			 nil))))
+	  expression-exists)))
 
 
 (defun pygen-is-parent-self (&optional bounds verified has-parent)
