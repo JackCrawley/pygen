@@ -686,43 +686,41 @@ after all imports.
   ;; If def exists, place before def
   ;; If class exists, place before class
   ;; Otherwise, navigate after imports and place in front of the first statement.
-  (let (first-class-position
-		first-def-position
-		first-expression-position
-		after-imports-position
-		insertion-position)
-	(goto-char (point-min))
-	(save-excursion
-	  (while (re-search-forward
-			  "import *[A-Za-z_][A-Za-z_0-9].*\\|^from +[A-Za-z_][A-Za-z_0-9.]+ +import .*" nil t)
-		;; HACK: The above import searching regexp is dumb.  It stops
-		;;       once it enters a bracketed import.  This is a way of
-		;;       getting it to carry on, however it looks fragile to
-		;;       me.
-		(when (looking-back "(")
-		  (search-forward ")")))
-	  (setq after-imports-position (point)))
-	;; TODO: Replace this a method for finding the first class with
-	;; supplying an indent parameter to the `py-forward-class' method.
-	(save-excursion
-	  (py-down-class)
-	  (py-up-class)
-	  (if (<= (point) (point-min))
-		  (setq first-class-position nil)
-		(setq first-class-position (point))))
-	(save-excursion
-	  (py-down-def)
-	  (py-up-class)
-	  (if (<= (point) (point-min))
-		  (setq first-def-position nil)
-		(setq first-def-position (point))))
-	(save-excursion
-	  (goto-char after-imports-position)
-	  (py-forward-expression)
-	  (py-beginning-of-expression)
-	  (if (<= (point) after-imports-position)
-		  (setq first-expression-position nil)
-		(setq first-expression-position (point))))
+  (goto-char (point-min))
+  
+  (let* (;; TODO: Replace this a method for finding the first class with
+		 ;; supplying an indent parameter to the `py-forward-class' method.
+		 (first-class-position (save-excursion
+								 (py-down-class)
+								 (py-up-class)
+								 (if (<= (point) (point-min))
+									 nil
+								   (point))))
+		 (first-def-position (save-excursion
+							   (py-down-def)
+							   (py-up-class)
+							   (if (<= (point) (point-min))
+								   nil
+								 (point))))
+		 (after-imports-position
+		  (save-excursion
+			(while (re-search-forward
+					"import *[A-Za-z_][A-Za-z_0-9].*\\|^from +[A-Za-z_][A-Za-z_0-9.]+ +import .*" nil t)
+			  ;; HACK: The above import searching regexp is dumb.  It stops
+			  ;;       once it enters a bracketed import.  This is a way of
+			  ;;       getting it to carry on, however it looks fragile to
+			  ;;       me.
+			  (when (looking-back "(")
+				(search-forward ")")))
+			(point)))
+		 (first-expression-position (save-excursion
+									  (goto-char after-imports-position)
+									  (py-forward-expression)
+									  (py-beginning-of-expression)
+									  (if (<= (point) after-imports-position)
+										  nil
+										(point)))))
+	
 	(cond ((and first-class-position first-def-position)
 		   ;; If class and definition both exist, move to the earlier
 		   ;; of the two.
