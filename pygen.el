@@ -1156,56 +1156,49 @@ Must be currently inside a class to do this."
   "Generat a python class from the reference under point."
   (interactive)
   ;; TODO: Generate a python class from a reference
-  (let ((bounds (pygen-get-expression-bounds))
-		class-name
-		arguments
-		has-parent
-		is-method
-		parent-is-self)
-	;; Ensure it's a valid function signature
+  (let ((bounds (pygen-get-expression-bounds)))
 	(pygen-verify-expression bounds)
+	;; Ensure it's a valid function signature
 	(when (pygen-expression-exists)
 	  (user-error "Error: this name already exists. Navigate to its definition to find out where."))
-	;; Get function parts (name, args, is-method)
-	(setq class-name (pygen-get-expression-name bounds t))
-	(setq arguments (pygen-get-expression-arguments bounds t))
-	(setq has-parent (pygen-has-parent bounds t))
-	(when has-parent
-	  (setq parent-is-self (pygen-is-parent-self bounds t has-parent)))
-	
-	(message "Generating class, please wait...")
-	(if has-parent
-		;; If the immediate parent is the "self" keyword
-		(if parent-is-self
-			(progn
-			  (pygen-create-new-class-in-class arguments class-name))
-		  (pygen-goto-expression-parent)
-		  (message "Still generating class, please wait...")
-		  (redisplay)
-		  ;; Is the parent a class or a module? Each requires
-		  ;; different handling.
-		  (if (pygen-class-at-point)
-			  (pygen-create-new-class-in-class arguments class-name)
-			(pygen-create-new-class-in-module arguments class-name)))
-	  ;; Otherwise create in current module.
-	  (pygen-create-new-class-in-module arguments class-name))
-	(message "Class generated.")))
+	(let* ((class-name (pygen-get-expression-name bounds t))
+		   (arguments (pygen-get-expression-arguments bounds t)) 
+		   (has-parent (pygen-has-parent bounds t))
+		   (parent-is-self (if has-parent
+							   (setq parent-is-self (pygen-is-parent-self bounds t has-parent))
+							 nil)))
+	  (message "Generating class, please wait...")
+	  (if has-parent
+		  ;; If the immediate parent is the "self" keyword
+		  (if parent-is-self
+			  (progn
+				(pygen-create-new-class-in-class arguments class-name))
+			(pygen-goto-expression-parent)
+			(message "Still generating class, please wait...")
+			(redisplay)
+			;; Is the parent a class or a module? Each requires
+			;; different handling.
+			(if (pygen-class-at-point)
+				(pygen-create-new-class-in-class arguments class-name)
+			  (pygen-create-new-class-in-module arguments class-name)))
+		;; Otherwise create in current module.
+		(pygen-create-new-class-in-module arguments class-name))
+	  (message "Class generated."))))
 
 
 (defun pygen-extract-variable ()
   "Generate a python variable from a reference."
   (interactive)
-  (let (boundaries
-		start-position
-		end-position)
-	(if (region-active-p)
-		(progn 
-		  (pygen-extract-variable-from-region))
-	  (error "Error: region must be active to extract it into a variable.")
+  
+  (if (region-active-p)
+	  (progn 
+		(pygen-extract-variable-from-region))
+	(error "Error: region must be active to extract it into a variable.")
+	;; Not implemented yet.  Control will not flow to here.
+	(let* ((boundaries (pygen-bounds-of-thing-at-point))
+		   (start-position (car boundaries))
+		   (end-position (cdr boundaries)))
 	  ;; TODO: Implement dynamic extraction of variables.
-	  (setq boundaries (pygen-bounds-of-thing-at-point))
-	  (setq start-position (car boundaries))
-	  (setq end-position (cdr boundaries))
 	  (pygen-extract-variable-internal start-position end-position))))
 
 
