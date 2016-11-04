@@ -1044,40 +1044,36 @@ definition.  It will throw an error otherwise."
 (defun pygen-generate-function ()
   "Generate a python function from the reference under point."
   (interactive)
-  (let ((bounds (pygen-get-expression-bounds))
-		function-name
-		arguments
-		has-parent
-		is-method
-		parent-is-self)
+  (let ((bounds (pygen-get-expression-bounds)))
 	;; Ensure it's a valid function signature
 	(pygen-verify-expression bounds)
 	(when (pygen-expression-exists)
 	  (user-error "Error: this name already exists. Navigate to its definition to find out where."))
+	
 	;; Get function parts (name, args, is-method)
-	(setq function-name (pygen-get-expression-name bounds t))
-	(setq arguments (pygen-get-expression-arguments bounds t))
-	(setq has-parent (pygen-has-parent bounds t))
-	(when has-parent
-	  (setq parent-is-self (pygen-is-parent-self bounds t has-parent)))
-
-	(message "Generating function, please wait...")
-	(if has-parent
-		;; If the immediate parent is the "self" keyword
-		(if parent-is-self
-			(progn
-			  (pygen-create-new-function-in-class arguments function-name))
-		  (pygen-goto-expression-parent)
-		  ;; Is the parent a class or a module? Each requires
-		  ;; different handling.
-		  (message "Still generating function, please wait...")
-		  (redisplay)
-		  (if (pygen-class-at-point)
-			  (pygen-create-new-function-in-class arguments function-name)
-			(pygen-create-new-function-in-module arguments function-name)))
-	  ;; Otherwise create in current module.
-	  (pygen-create-new-function-in-module arguments function-name))
-	(message "Function generated.")))
+	(let* ((function-name (pygen-get-expression-name bounds t))
+		   (arguments (pygen-get-expression-arguments bounds t))
+		   (has-parent (pygen-has-parent bounds t))
+		   (parent-is-self (if has-parent
+							   (pygen-is-parent-self bounds t has-parent)
+							 nil)))
+	  (message "Generating function, please wait...")
+	  (if has-parent
+		  ;; If the immediate parent is the "self" keyword
+		  (if parent-is-self
+			  (progn
+				(pygen-create-new-function-in-class arguments function-name))
+			(pygen-goto-expression-parent)
+			;; Is the parent a class or a module? Each requires
+			;; different handling.
+			(message "Still generating function, please wait...")
+			(redisplay)
+			(if (pygen-class-at-point)
+				(pygen-create-new-function-in-class arguments function-name)
+			  (pygen-create-new-function-in-module arguments function-name)))
+		;; Otherwise create in current module.
+		(pygen-create-new-function-in-module arguments function-name))
+	  (message "Function generated."))))
 
 
 (defun pygen-generate-static-function ()
