@@ -901,7 +901,8 @@ function.  Leave this as nil if no decorators should be added."
 	(py-newline-and-indent)
 
 	(let ((end-position (point)))
-	  ;; Dummy function contents. Easier to just leave this out.
+	  ;; Insert dummy function contents. Easier to just leave this
+	  ;; out.
 	  ;; (insert "pass")
 	  (goto-char end-position))))
 
@@ -912,19 +913,14 @@ function.  Leave this as nil if no decorators should be added."
 `ARGUMENTS' should be a list of argument names.  
 `CLASS-NAME' is an optional name.  If it isn't provided, the user
 will be prompted for a name."
-  (let (start-position
-		indentation-start
-		indentation-end
-		indentation-string
-		end-position)
-	(push-mark nil t)
-	(setq start-position (point))
-	(py-beginning-of-class)
-	(setq indentation-end (point))
-	(beginning-of-line)
-	(setq indentation-start (point))
-	(setq indentation-string
-		  (buffer-substring-no-properties indentation-start indentation-end))
+  (push-mark nil t)
+  (py-beginning-of-class)
+  (let* ((indentation-end (point))
+		 (indentation-start (save-excursion
+							  (beginning-of-line)
+							  (point)))
+		 (indentation-string (buffer-substring-no-properties
+							  indentation-start indentation-end)))
 	(goto-char indentation-end)
 	(py-end-of-class)
 	(insert "\n\n")
@@ -945,40 +941,42 @@ will be prompted for a name."
 		  (insert argument))))
 	(insert "):")
 	(py-newline-and-indent)
-	(setq end-position (point))
-	;; (insert "pass")
-	(goto-char end-position)))
+	(let ((end-position (point)))
+	  ;; Insert dummy init function contents. Easier to just leave
+	  ;; this out.
+	  ;; (insert "pass")
+	  (goto-char end-position))))
 
 
 (defun pygen-extract-variable-internal (start-position end-position)
   "Extract the code within a given region into a variable."
   (let ((variable-name (read-string "Variable name: "))
-		 variable-value
-		 new-position
-		 statement-start
-		 indentation-string)
-	 (when (or (string= variable-name "")
-			   (not variable-name))
-	   (error "Error: variable name cannot be empty."))
-	 (setq variable-value
-		   (buffer-substring-no-properties start-position end-position))
-	 (goto-char end-position)
-	 (save-excursion
-	   (delete-region start-position end-position)
-	   (insert variable-name)
-	   (setq new-position (point))
-	   (py-beginning-of-statement)
-	   (setq statement-start (point))
-	   (beginning-of-line)
-	   (setq indentation-string
-			 (buffer-substring-no-properties (point) statement-start))
-	   (insert "\n")
-	   (forward-line -1)
-	   (insert indentation-string)
-	   (insert (concat variable-name " = " variable-value))
-	   (goto-char new-position))
-	 (right-char (length variable-name))
-	 (message (concat "Variable `" variable-name "' generated."))))
+		variable-value
+		new-position
+		statement-start
+		indentation-string)
+	(when (or (string= variable-name "")
+			  (not variable-name))
+	  (error "Error: variable name cannot be empty."))
+	(setq variable-value
+		  (buffer-substring-no-properties start-position end-position))
+	(goto-char end-position)
+	(save-excursion
+	  (delete-region start-position end-position)
+	  (insert variable-name)
+	  (setq new-position (point))
+	  (py-beginning-of-statement)
+	  (setq statement-start (point))
+	  (beginning-of-line)
+	  (setq indentation-string
+			(buffer-substring-no-properties (point) statement-start))
+	  (insert "\n")
+	  (forward-line -1)
+	  (insert indentation-string)
+	  (insert (concat variable-name " = " variable-value))
+	  (goto-char new-position))
+	(right-char (length variable-name))
+	(message (concat "Variable `" variable-name "' generated."))))
 
 
 (defun pygen-extract-variable-from-region ()
