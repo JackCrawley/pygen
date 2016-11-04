@@ -1133,7 +1133,7 @@ Must be currently inside a class to do this."
 		   (arguments (pygen-get-expression-arguments bounds t)) 
 		   (has-parent (pygen-has-parent bounds t))
 		   (parent-is-self (if has-parent
-							   (setq parent-is-self (pygen-is-parent-self bounds t has-parent))
+							   (pygen-is-parent-self bounds t has-parent)
 							 nil)))
 	  (message "Generating class, please wait...")
 	  (if has-parent
