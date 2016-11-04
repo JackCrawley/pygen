@@ -156,7 +156,7 @@
 (defun pygen-verify-expression (&optional bounds)
   "Verify the point is on an expression."
   ;; Get parameters not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
   ;; TODO: verify the current expression
   t)
@@ -175,9 +175,9 @@
 (defun pygen-has-parent (&optional bounds verified)
   "Check whether this expression has a parent."
   ;; Get input parameters if not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
-  (when (not verified)
+  (unless verified
 	(setq verified (pygen-verify-expression)))
   ;; Now check whether this expression has a parent.
   (save-excursion
@@ -192,41 +192,41 @@
 (defun pygen-goto-expression-parent (&optional bounds verified)
   "Go to the parent of this expression."
   ;; Get input parameters if not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
-  (when (not verified)
+  (unless verified
 	(setq verified (pygen-verify-expression)))
   ;; Now go to the parent of this expression
-	(let ((left-bound (car bounds)))
-	  (goto-char left-bound)
-	  ;; If preceding character is a dot
-	  (if (pygen-has-parent)
-		  (progn
-			;; Navigate to parent
-			;; TODO: Move back to function after this
-			(left-char 2)
-			(let (error-variable)
-			  (condition-case error-variable
-				  (funcall pygen-navigate-to-definition-command)
-				(error
-				 (message "Pygen could not navigate to the parent of this expression.")
-				 (if (not (string-match "No definition found" (error-message-string error-variable)))
-					 (progn
-					   (message (concat "Miscellaneous error. Perhaps try "
-										"calling the same command again. "
-										"Original error below."))
-					   error-variable)
-				   (error "The parent of this expression could not be found."))))))
-		;; Throw an error if we arent looking at something with a parent
-		(error "Expression does not have a parent. Cannot navigate to parent expression."))))
+  (let ((left-bound (car bounds)))
+	(goto-char left-bound)
+	;; If preceding character is a dot
+	(if (pygen-has-parent)
+		(progn
+		  ;; Navigate to parent
+		  ;; TODO: Move back to function after this
+		  (left-char 2)
+		  (let (error-variable)
+			(condition-case error-variable
+				(funcall pygen-navigate-to-definition-command)
+			  (error
+			   (message "Pygen could not navigate to the parent of this expression.")
+			   (if (not (string-match "No definition found" (error-message-string error-variable)))
+				   (progn
+					 (message (concat "Miscellaneous error. Perhaps try "
+									  "calling the same command again. "
+									  "Original error below."))
+					 error-variable)
+				 (error "The parent of this expression could not be found."))))))
+	  ;; Throw an error if we arent looking at something with a parent
+	  (error "Expression does not have a parent. Cannot navigate to parent expression."))))
 
 
 (defun pygen-get-expression-name (&optional bounds verified)
   "Get the name of the function within `BOUNDS'."
   ;; Get input parameters if not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
-  (when (not verified)
+  (unless verified
 	(setq verified (pygen-verify-expression)))
   ;; Now get the expression name
   (let ((full-expression (buffer-substring-no-properties (car bounds) (cdr bounds))))
@@ -245,9 +245,9 @@
 Does not include parentheses.  Only gets the argument inside the
 parentheses."
   ;; Get input parameters if not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
-  (when (not verified)
+  (unless verified
 	(setq verified (pygen-verify-expression)))
   ;; Now get the expression arguments as a string
   (let ((full-expression (buffer-substring-no-properties (car bounds) (cdr bounds))))
@@ -291,9 +291,9 @@ extract some kind of meaningful argument."
 (defun pygen-get-expression-arguments (&optional bounds verified)
   "Get the list of arguments for the current expression."
   ;; Get input parameters if not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
-  (when (not verified)
+  (unless verified
 	(setq verified (pygen-verify-expression)))
   ;; Now get expression arguments
   (save-excursion
@@ -354,7 +354,7 @@ WARNING: Does not work with star arguments."
 	  (goto-char 1)
 	  (let ((last-position (point)))
 		(while (search-forward "," nil t)
-		  (when (not (in-string-p))
+		  (unless (in-string-p)
 			(push (buffer-substring-no-properties last-position (- (point) 1)) individual-arguments-strings)
 			(setq last-position (point))))
 		(when (re-search-forward "[A-Za-z0-9_*]" nil t)
@@ -398,8 +398,8 @@ performed to see whether the point is in a function.  This check
 can take time, so it's optimal to only do it once."
   (save-excursion
 	(let (arguments-string)
-	  (when (not in-function)
-		(when (not (pygen-def-at-point))
+	  (unless in-function
+		(unless (pygen-def-at-point)
 		  (error "Error: not currently in a def.")))
 	  (py-beginning-of-def-or-class)
 	  (search-forward "(")
@@ -478,20 +478,20 @@ performed to see whether the point is in a function.  This check
 can take time, so it's optimal to only do it once.
 
 `ARGUMENT' is the argument to check for."
-  (when (not in-function)
+  (unless in-function
 	(setq in-function (pygen-def-at-point)))
   (let ((argument-exists nil)
 		(arguments-list (pygen-get-def-arguments)))
 	(mapc (lambda (existing-argument)
-			 (when (string= (downcase argument) (downcase (car existing-argument)))
-			   (setq argument-exists t)))
+			(when (string= (downcase argument) (downcase (car existing-argument)))
+			  (setq argument-exists t)))
 		  arguments-list)
 	argument-exists))
 
 
 (defun pygen-add-keyword-argument-internal (argument)
   "Add a keyword argument to the current function's definition."
-  (when (not (pygen-def-at-point))
+  (unless (pygen-def-at-point)
 	(error "Error: not currently in a def."))
   (when (pygen-argument-already-exists argument t)
 	(error "Error: the argument `%s' already already exists in the function definition."
@@ -522,7 +522,7 @@ can take time, so it's optimal to only do it once.
 	  (let ((star-args-present nil)
 			first-star-argument) 
 		(while (search-backward "*" start-position t)
-		  (when (not (in-string-p))
+		  (unless (in-string-p)
 			(setq star-args-present t)
 			(setq first-star-argument (point))))
 		;; If another argument already exists, argument must be inserted
@@ -547,7 +547,7 @@ can take time, so it's optimal to only do it once.
 
 (defun pygen-add-sequence-argument-internal (argument)
   "Add a sequence argument to the current functions definition." 
-  (when (not (pygen-def-at-point))
+  (unless (pygen-def-at-point)
 	(error "Error: not currently in a def."))
   (when (pygen-argument-already-exists argument)
 	(error "Error: the argument `%s' already already exists in the function definition."
@@ -595,7 +595,7 @@ can take time, so it's optimal to only do it once.
 		(let ((star-args-present nil)
 			  first-star-argument)
 		  (while (search-backward "*" start-position t)
-			(when (not (in-string-p))
+			(unless (in-string-p)
 			  (setq star-args-present t)
 			  (setq first-star-argument (point))))
 		  (if star-args-present
@@ -615,9 +615,9 @@ can take time, so it's optimal to only do it once.
 (defun pygen-expression-exists (&optional bounds verified)
   "Check if the current expression already exists."
   ;; Get input parameters if not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
-  (when (not verified)
+  (unless verified
 	(setq verified (pygen-verify-expression)))
   ;; Now check if the function exists
   ;; TODO: Optimise this. Find a faster method of checking if it exists.
@@ -652,11 +652,11 @@ can take time, so it's optimal to only do it once.
 (defun pygen-is-parent-self (&optional bounds verified has-parent)
   "Check if the immediate parent of this expression is 'self'."
   ;; Get input parameters if not provided
-  (when (not bounds)
+  (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
-  (when (not verified)
+  (unless verified
 	(setq verified (pygen-verify-expression)))
-  (when (not has-parent)
+  (unless has-parent
 	(setq has-parent (pygen-has-parent)))
   ;; Now check if the parent is self
   (save-excursion
@@ -738,7 +738,7 @@ after all imports.
   ;; Now the cursor is in position, the function can be created.
   (let (start-position
 		end-position)
-	(when (not function-name)
+	(unless function-name
 	  (setq function-name (read-string "Enter function name: ")))
 	(beginning-of-line)
 	(setq start-position (point))
@@ -820,7 +820,7 @@ after all imports."
   ;; Now the cursor is in position, the function can be created.
   (let (start-position
 		end-position)
-	(when (not class-name)
+	(unless class-name
 	  (setq class-name (read-string "Enter class name: ")))
 	(beginning-of-line)
 	(setq start-position (point))
@@ -884,10 +884,10 @@ function.  Leave this as nil if no decorators should be added."
 		  (insert "\n")))
 	  ;; Insert function itself
 	  (insert indentation-string)
-	  (when (not function-name)
+	  (unless function-name
 		(setq function-name (read-string "Enter function name: ")))
 	  (insert (concat "def " function-name "("))
-	  (when (not static-function)
+	  (unless static-function
 		(insert "self")
 		(when arguments
 		  (insert ", "))))
@@ -925,7 +925,7 @@ will be prompted for a name."
 	(py-end-of-class)
 	(insert "\n\n")
 	(insert indentation-string)
-	(when (not class-name)
+	(unless class-name
 	  (setq class-name (read-string "Enter class name: ")))
 	(insert (concat "class " class-name "():"))
 	(py-shift-class-right)
@@ -1002,9 +1002,9 @@ If function is called interactively, prompts for a decorator.
 
 If no decorator has been provided, prompts for a decorator."
   (interactive)
-  (when (not (pygen-def-at-point))
+  (unless (pygen-def-at-point)
 	(error "Error: not currently in a function"))
-  (when (not decorator)
+  (unless decorator
 	(setq decorator (read-string "Enter decorator: " "@"))
 	(when (string= decorator "")
 	  (error "Error: decorator cannot be empty.")))
@@ -1028,7 +1028,7 @@ definition.  It will throw an error otherwise."
   (error "Error: method not yet implemented.")
   ;; TODO: This check is performed twice if interactive frontend is called.
   ;; TODO: Allow this command to work with classes as well as functions
-  (when (not (pygen-def-at-point))
+  (unless (pygen-def-at-point)
 	(error "Error: no def found at point."))
   (when (pygen-argument-already-exists argument)
 	(py-beginning-of-def-or-class)
@@ -1098,7 +1098,7 @@ Must be currently inside a class to do this."
 		   (parent-is-self (if has-parent
 							   (pygen-is-parent-self bounds t has-parent)
 							 nil)))	
-	  ;; (when (not has-parent)
+	  ;; (unless has-parent
 	  ;;   (error "Error: cannot understand where to create this function. Does the expression specify a parent?"))
 
 	  (message "Generating function, please wait...")
@@ -1184,7 +1184,7 @@ arguments, to have minimal impact on existing calls to this
 function."
   (interactive)
   (let ((variable-name (thing-at-point 'symbol)))
-	(when (not variable-name)
+	(unless variable-name
 	  (user-error "No variable under point."))
 	(pygen-add-keyword-argument-internal variable-name))
   (message "Keyword argument created. Input default value."))
@@ -1203,7 +1203,7 @@ argument after existing arguments but before keyword arguments,
 to have minimal impact on existing calls to this function."
   (interactive)
   (let ((variable-name (thing-at-point 'symbol)))
-	(when (not variable-name)
+	(unless variable-name
 	  (user-error "No variable under point."))
 	(save-excursion
 	  (pygen-add-sequence-argument-internal variable-name)))
@@ -1230,9 +1230,9 @@ This is basically just a wrapper for `py-insert-super'"
   "Puts the word 'self.' in front of the current symbol."
   (interactive)
   (save-excursion
-	(when (not (symbol-at-point))
+	(unless (symbol-at-point)
 	  (error "No symbol could be found at point."))
-	(when (not (pygen-class-at-point))
+	(unless (pygen-class-at-point)
 	  (error "Not currently in a class."))
 	(when (string= (symbol-at-point) "self")
 	  (error "'self' keyword already present."))
@@ -1249,14 +1249,14 @@ This is basically just a wrapper for `py-insert-super'"
   "Remove the word 'self.' from the current symbol (if it exists)."
   (interactive)
   (save-excursion
-	(when (not (symbol-at-point))
+	(unless (symbol-at-point)
 	  (error "No symbol could be found at point."))
 	(if (string= (symbol-at-point) "self")
-	  (let ((bounds (bounds-of-thing-at-point 'symbol)))
-		(goto-char (car bounds))
-		(delete-region (car bounds) (cdr bounds))
-		(when (looking-at "\.")
-		  (delete-char 1)))
+		(let ((bounds (bounds-of-thing-at-point 'symbol)))
+		  (goto-char (car bounds))
+		  (delete-region (car bounds) (cdr bounds))
+		  (when (looking-at "\.")
+			(delete-char 1)))
 	  (goto-char (car (pygen-get-expression-bounds)))
 	  (if (looking-back "self\.[A-Za-z0-9._*]*")
 		  (progn
@@ -1270,7 +1270,7 @@ This is basically just a wrapper for `py-insert-super'"
   "Toggle the word 'self' in front of the current symbol."
   (interactive)
   (save-excursion
-	(when (not (symbol-at-point))
+	(unless (symbol-at-point)
 	  (error "No symbol could be found at point."))
 	(goto-char (car (pygen-get-expression-bounds)))
 	(if (or (looking-back "self\.[A-Za-z0-9._*]*")
