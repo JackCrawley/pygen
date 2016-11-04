@@ -1283,18 +1283,18 @@ This is basically just a wrapper for `py-insert-super'"
   "Keymap for pygen.")
 (set-keymap-parent pygen-mode-map python-mode-map)
 
-(define-key pygen-mode-map (kbd "C-c C-= @") 'pygen-add-decorator-to-function)
-(define-key pygen-mode-map (kbd "C-c C-= v") 'pygen-extract-variable)
-(define-key pygen-mode-map (kbd "C-c C-= c") 'pygen-generate-class)
-(define-key pygen-mode-map (kbd "C-c C-= f") 'pygen-generate-function)
-(define-key pygen-mode-map (kbd "C-c C-= s") 'pygen-generate-static-function)
-(define-key pygen-mode-map (kbd "C-c C-= u") 'pygen-insert-super)
-(define-key pygen-mode-map (kbd "C-c C-= k") 'pygen-make-keyword-argument)
-(define-key pygen-mode-map (kbd "C-c C-= a") 'pygen-make-sequence-argument)
-(define-key pygen-mode-map (kbd "C-c C-= m") 'pygen-make-static)
+(define-key pygen-mode-map (kbd "C-c g @") 'pygen-add-decorator-to-function)
+(define-key pygen-mode-map (kbd "C-c g v") 'pygen-extract-variable)
+(define-key pygen-mode-map (kbd "C-c g c") 'pygen-generate-class)
+(define-key pygen-mode-map (kbd "C-c g f") 'pygen-generate-function)
+(define-key pygen-mode-map (kbd "C-c g s") 'pygen-generate-static-function)
+(define-key pygen-mode-map (kbd "C-c g u") 'pygen-insert-super)
+(define-key pygen-mode-map (kbd "C-c g k") 'pygen-make-keyword-argument)
+(define-key pygen-mode-map (kbd "C-c g a") 'pygen-make-sequence-argument)
+(define-key pygen-mode-map (kbd "C-c g m") 'pygen-make-static)
 ;; (define-key pygen-mode-map (kbd "") 'pygen-selfify-symbol)
 ;; (define-key pygen-mode-map (kbd "") 'pygen-unselfify-symbol)
-(define-key pygen-mode-map (kbd "C-c C-= .") 'pygen-toggle-selfify-symbol)
+(define-key pygen-mode-map (kbd "C-c g .") 'pygen-toggle-selfify-symbol)
 
 
 (define-minor-mode pygen-minor-mode
