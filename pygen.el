@@ -1025,6 +1025,7 @@ If no decorator has been provided, prompts for a decorator."
 
 This function can only be called from within a function
 definition.  It will throw an error otherwise."
+  (error "Error: method not yet implemented.")
   ;; TODO: This check is performed twice if interactive frontend is called.
   ;; TODO: Allow this command to work with classes as well as functions
   (when (not (pygen-def-at-point))
@@ -1035,9 +1036,9 @@ definition.  It will throw an error otherwise."
 	;; don't go past the end of the function.
 	(search-forward "(")
 	(while (re-search-forward "[A-Za-z0-9_*]")
+	  )
 	)
-	)
-  (error "Error: method not yet implemented."))
+  )
 
 
 (defun pygen-generate-function ()
