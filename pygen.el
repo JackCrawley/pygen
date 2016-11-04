@@ -958,25 +958,25 @@ will be prompted for a name."
 	(when (or (string= variable-name "")
 			  (not variable-name))
 	  (error "Error: variable name cannot be empty."))
-	(setq variable-value
-		  (buffer-substring-no-properties start-position end-position))
-	(goto-char end-position)
-	(save-excursion
-	  (delete-region start-position end-position)
-	  (insert variable-name)
-	  (setq new-position (point))
-	  (py-beginning-of-statement)
-	  (setq statement-start (point))
-	  (beginning-of-line)
-	  (setq indentation-string
-			(buffer-substring-no-properties (point) statement-start))
-	  (insert "\n")
-	  (forward-line -1)
-	  (insert indentation-string)
-	  (insert (concat variable-name " = " variable-value))
-	  (goto-char new-position))
-	(right-char (length variable-name))
-	(message (concat "Variable `" variable-name "' generated."))))
+	(let ((variable-value (buffer-substring-no-properties start-position
+														  end-position)))
+	  (goto-char end-position)
+	  (save-excursion
+		(delete-region start-position end-position)
+		(insert variable-name)
+		(let ((new-position (point)))
+		  (py-beginning-of-statement)
+		  (let ((statement-start (point)))
+			(beginning-of-line)
+			(let ((indentation-string (buffer-substring-no-properties
+									   (point) statement-start)))
+			  (insert "\n")
+			  (forward-line -1)
+			  (insert indentation-string)))
+		  (insert (concat variable-name " = " variable-value))
+		  (goto-char new-position))
+		(right-char (length variable-name))
+		(message (concat "Variable `" variable-name "' generated."))))))
 
 
 (defun pygen-extract-variable-from-region ()
