@@ -1009,17 +1009,15 @@ If no decorator has been provided, prompts for a decorator."
 	(when (string= decorator "")
 	  (error "Error: decorator cannot be empty.")))
   (save-excursion
-	(let (def-start
-		   indentation-string)
-	  (py-beginning-of-def-or-class)
-	  (setq def-start (point))
+	(py-beginning-of-def-or-class)
+	(let ((def-start (point)))
 	  (beginning-of-line)
-	  (setq indentation-string
-			(buffer-substring-no-properties (point) def-start))
-	  (insert "\n")
-	  (forward-line -1)
-	  (insert indentation-string)
-	  (insert decorator))))
+	  (let ((indentation-string (buffer-substring-no-properties
+								 (point) def-start)))
+		(insert "\n")
+		(forward-line -1)
+		(insert indentation-string)
+		(insert decorator)))))
 
 
 (defun pygen-remove-argument (argument)
