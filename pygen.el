@@ -1352,6 +1352,9 @@ GitHub repo for this project."
 
 ;; TODO: Implement suggestions from the Melpa guys
 
+;; TODO: Work out if default python-mode follow command can be
+;; used. `py-find-definition'
+
 ;; FIXME: Can't generate function if it looks like the following:
 ;;        variable = Class(function_name)
 
