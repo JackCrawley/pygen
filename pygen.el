@@ -1283,6 +1283,25 @@ This is basically just a wrapper for `py-insert-super'"
   "Keymap for pygen.")
 (set-keymap-parent pygen-mode-map python-mode-map)
 
+
+;; This is the precursor to a possible Hydra. Need to figure out a bit
+;; better how Hydras work before I can implement this fluidly.
+
+;; (define-key pygen-mode-map (kbd "C-c g g")
+;;   (defhydra pygen-menu
+;; 	()
+;; 	"Pygen"
+;; 	("c" pygen-generate-class "Generate class")
+;; 	("f" pygen-generate-function "Generate function")
+;; 	("s" pygen-generate-static-function "Generate static function")
+;; 	("v" pygen-extract-variable "Extract variable")
+;; 	("k" pygen-make-keyword-argument "Add keyword argument")
+;; 	("a" pygen-make-sequence-argument "Add sequence argument")
+;; 	("." pygen-toggle-selfify-symbol "Toggle self")
+;; 	;; ("m" pygen-make-static "Make function static")
+;; 	("@" pygen-add-decorator-to-function "Add decorator")
+;; 	("u" pygen-insert-super "Insert call to super")))
+
 (define-key pygen-mode-map (kbd "C-c g @") 'pygen-add-decorator-to-function)
 (define-key pygen-mode-map (kbd "C-c g v") 'pygen-extract-variable)
 (define-key pygen-mode-map (kbd "C-c g c") 'pygen-generate-class)
@@ -1292,6 +1311,8 @@ This is basically just a wrapper for `py-insert-super'"
 (define-key pygen-mode-map (kbd "C-c g k") 'pygen-make-keyword-argument)
 (define-key pygen-mode-map (kbd "C-c g a") 'pygen-make-sequence-argument)
 (define-key pygen-mode-map (kbd "C-c g m") 'pygen-make-static)
+;; Toggling of the ".self" keyword is the only ".self" command that is
+;; bound.
 ;; (define-key pygen-mode-map (kbd "") 'pygen-selfify-symbol)
 ;; (define-key pygen-mode-map (kbd "") 'pygen-unselfify-symbol)
 (define-key pygen-mode-map (kbd "C-c g .") 'pygen-toggle-selfify-symbol)
@@ -1330,8 +1351,6 @@ GitHub repo for this project."
 ;; TODO: Add Hydra
 
 ;; TODO: Implement suggestions from the Melpa guys
-
-;; TODO: Change keybindings ("C-=" is not available on some terminals)
 
 ;; FIXME: Can't generate function if it looks like the following:
 ;;        variable = Class(function_name)
