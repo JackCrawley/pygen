@@ -1318,15 +1318,15 @@ This is basically just a wrapper for `py-insert-super'"
 (define-key pygen-mode-map (kbd "C-c g .") 'pygen-toggle-selfify-symbol)
 
 
-(define-minor-mode pygen-minor-mode
+(define-minor-mode pygen-mode
   "Minor mode that allows python code-generation commands to be used.
 
 These commands are outlined in the main file, as well as in the
 GitHub repo for this project."
   :group 'pygen
   :keymap pygen-mode-map
-  :lighter " pygen"
-  (when pygen-minor-mode
+  :lighter ""
+  (when pygen-mode
 	(pygen-verify-environment)
 	(run-hooks pygen-mode-hook)))
 
@@ -1350,13 +1350,18 @@ GitHub repo for this project."
 
 ;; TODO: Add Hydra
 
-;; TODO: Implement suggestions from the Melpa guys
-
 ;; TODO: Work out if default python-mode follow command can be
 ;; used. `py-find-definition'
 
+;; TODO: Test everything still works after massive refactoring
+
 ;; FIXME: Can't generate function if it looks like the following:
-;;        variable = Class(function_name)
+;;     variable = Class(function_name)
+
+;; FIXME: Can't generate function if the enclosing class is in the
+;; current module, for example:
+;;     MyClass.my_function()
+;; where MyClass is a class in the current module.
 
 
 (provide 'pygen)
