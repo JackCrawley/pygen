@@ -1365,6 +1365,9 @@ GitHub repo for this project."
 ;;     MyClass.my_function()
 ;; where MyClass is a class in the current module.
 
+;; FIXME: Can't currently cope with bracketed imports, e.g:
+;;     `from X import (...)'
+
 
 (provide 'pygen)
 ;;; pygen.el ends here
