@@ -1358,7 +1358,8 @@ GitHub repo for this project."
 ;; TODO: Set mark before jumping into generated code
 
 ;; FIXME: Can't generate function if it looks like the following:
-;;     variable = Class(function_name)
+;;     variable = MyClass(function_name)
+;; Instead,  it just creates a function called MyClass.
 
 ;; FIXME: Can't generate function if the enclosing class is in the
 ;; current module, for example:
