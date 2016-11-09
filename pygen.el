@@ -1355,6 +1355,8 @@ GitHub repo for this project."
 
 ;; TODO: Test everything still works after massive refactoring
 
+;; TODO: Set mark before jumping into generated code
+
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = Class(function_name)
 
