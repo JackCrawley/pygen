@@ -203,7 +203,6 @@ point in the current module."
 									  name-to-find)
 							  nil t)
 	  (if lowest-indent
-		  ;; FIXME:
 		  (let (indentation-length (py-indentation-of-statement))
 			(when (> lowest-indent indentation-length)
 			  (setq lowest-indent indentation-length)
