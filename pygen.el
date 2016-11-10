@@ -893,7 +893,8 @@ after all imports."
   "Create a new function in the current class.
 
 `ARGUMENTS' - the arguments the function should take, as a list
-of (NAME . DEFAULT-VALUE) pairs.
+of (NAME . DEFAULT-VALUE) pairs. Give a DEFAULT-VALUE of nil to
+create an argument with no default value.
 
 `FUNCTION-NAME' - the name of the function.  If this is not
 provided, the user will be prompted for a name.
@@ -909,9 +910,6 @@ function.  Leave this as nil if no decorators should be added."
 		 (indentation-string (buffer-substring-no-properties
 							  indentation-start indentation-end)))
 	(beginning-of-line)
-	(setq indentation-start (point))
-	(setq indentation-string
-		  (buffer-substring-no-properties indentation-start indentation-end))
 	(goto-char indentation-end)
 	(py-end-of-class)
 	(insert "\n\n")
