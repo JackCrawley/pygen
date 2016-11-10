@@ -189,6 +189,35 @@
 	 (string-match "[A-Za-z0-9_]\\." (buffer-substring (- (point) 2) (point))))))
 
 
+(defun pygen-navigate-to-definition-in-module ()
+  "Attempts to navigate to the definition of the class under
+point in the current module."
+  ;; TODO: Find all instances of the current class in the current
+  ;; module, and record the indentation level.
+  (let ((start-position (point))
+		(name-to-find (thing-at-point 'symbol))
+		(lowest-indent nil)
+		(current-definition-position nil))
+	(goto-char (point-min))
+	(while (re-search-forward (concat "\\(class\\|def\\)[ \t\n][ \t\n\\\\]*"
+									  name-to-find)
+							  nil t)
+	  (if lowest-indent
+		  ;; FIXME:
+		  (let (indentation-length (py-indentation-of-statement))
+			(when (> lowest-indent indentation-length)
+			  (setq lowest-indent indentation-length)
+			  (setq current-definition-position (point))))
+		(setq lowest-indent (py-count-indentation))
+		(setq current-definition-position (point))))
+	(if current-definition-position
+		(progn 
+		  (goto-char current-definition-position)
+		  (re-search-backward name-to-find nil t))
+	  (goto-char start-position)
+	  (error "No definition in current module"))))
+
+
 (defun pygen-goto-expression-parent (&optional bounds verified)
   "Go to the parent of this expression."
   ;; Get input parameters if not provided
@@ -209,14 +238,30 @@
 			(condition-case error-variable
 				(funcall pygen-navigate-to-definition-command)
 			  (error
-			   (message "Pygen could not navigate to the parent of this expression.")
-			   (if (not (string-match "No definition found" (error-message-string error-variable)))
-				   (progn
-					 (message (concat "Miscellaneous error. Perhaps try "
-									  "calling the same command again. "
-									  "Original error below."))
-					 error-variable)
-				 (error "The parent of this expression could not be found."))))))
+			   ;; If Elpy could not find the parent
+			   (if (string-match "No definition found" (error-message-string error-variable))
+				   ;; Attempt to use the pygen local method to
+				   ;; navigate to this parent.  If this doesn't work
+				   ;; either, throw an error saying the parent can't
+				   ;; be found.
+				   (let (error-variable-2)
+					 (condition-case error-variable-2
+						 (pygen-navigate-to-definition-in-module)
+					   (error
+						;; If a local method did not exist, throw an
+						;; error.  Otherwise a miscellaneous error has
+						;; been caught - so re-throw it.
+						(if (string-match "No definition in current module"
+										  (error-message-string error-variable-2))
+							(progn
+							  (message "Pygen could not navigate to the parent of this expression.")
+							  (error "The parent of this expression could not be found."))
+						  error-variable-2))))
+				 ;; Otherwise a miscellaneous error was thrown.
+				 (message "Pygen could not navigate to the parent of this expression.")
+				 (message (concat "Miscellaneous error. Perhaps try calling the "
+								  "same command again. Original error below."))
+				 error-variable)))))
 	  ;; Throw an error if we arent looking at something with a parent
 	  (error "Expression does not have a parent. Cannot navigate to parent expression."))))
 
@@ -1359,7 +1404,7 @@ GitHub repo for this project."
 
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
-;; Instead,  it just creates a function called MyClass.
+;; Instead, it just creates a function called MyClass.
 
 ;; FIXME: Can't generate function if the enclosing class is in the
 ;; current module, for example:
@@ -1368,6 +1413,11 @@ GitHub repo for this project."
 
 ;; FIXME: Can't currently cope with bracketed imports, e.g:
 ;;     `from X import (...)'
+
+;; FIXME: Indents classes below inserted functions/classes
+
+;; FIXME: Generating a static function in the parent "self" should
+;; throw an error.
 
 
 (provide 'pygen)
