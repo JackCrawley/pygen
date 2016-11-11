@@ -6,8 +6,7 @@
 ;; Keywords: python, code generation
 ;; Version: 0.1
 ;; Package-Requires: ((elpy "1.12.0") (python-mode "0"))
-;; URL: 
-;; TODO: Input URL
+;; URL: https://github.com/JackCrawley/pygen/
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
