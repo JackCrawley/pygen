@@ -1377,7 +1377,7 @@ GitHub repo for this project."
 	(run-hooks pygen-mode-hook)))
 
 
-;; TODO: generating constants?
+;; TODO: generating constants
 
 ;; TODO: pygen-make-star-argument
 
@@ -1413,7 +1413,10 @@ GitHub repo for this project."
 ;; should throw an error.
 
 ;; FIXME: module functions are generated at the bottom of the module,
-;; rather than in the most logical position.
+;; rather than in the most logical position. Does not apply to
+;; classes.
+
+;; TODO: Add autoload cookie.
 
 
 (provide 'pygen)
