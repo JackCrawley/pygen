@@ -5,7 +5,7 @@
 ;; Author: Jack Crawley <http://www.github.com/jackcrawley>
 ;; Keywords: python, code generation
 ;; Version: 0.1
-;; Package-Requires: ((elpy "1.12.0") (python-mode "0"))
+;; Package-Requires: ((elpy "1.12.0") (python-mode "6.2.2"))
 ;; URL: https://github.com/JackCrawley/pygen/
 
 ;; This program is free software; you can redistribute it and/or modify
