@@ -166,7 +166,7 @@
   ;; TODO: Expand this function so it can select any expression style.
   (save-excursion
 	(when (looking-back "[^A-Za-z0-9._*]")
-		(right-char))
+	  (right-char))
 	(py-partial-expression)
 	(cons (region-beginning) (region-end))))
 
@@ -466,7 +466,7 @@ can take time, so it's optimal to only do it once."
 	(condition-case nil
 		(py-mark-def)
 	  (wrong-type-argument (goto-char start-point)
-			 (setq error-marking-def t)))
+						   (setq error-marking-def t)))
 	(if (and (<= (region-beginning) start-point)
 			 (>= (region-end) start-point)
 			 (not (= start-point (mark)))
@@ -1402,6 +1402,9 @@ GitHub repo for this project."
 ;; TODO: Test everything still works after massive refactoring
 
 ;; TODO: Set mark before jumping into generated code
+
+;; TODO: Use YASnippets for generated code if the user has YASnippet
+;; installed.
 
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
