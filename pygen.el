@@ -1418,10 +1418,11 @@ GitHub repo for this project."
 ;; FIXME: Can't currently cope with bracketed imports, e.g:
 ;;     `from X import (...)'
 
-;; FIXME: Indents classes below inserted functions/classes
+;; FIXME: Generating a static function when the parent is "self"
+;; should throw an error.
 
-;; FIXME: Generating a static function in the parent "self" should
-;; throw an error.
+;; FIXME: module functions are generated at the bottom of the module,
+;; rather than iin the most logical position.
 
 
 (provide 'pygen)
