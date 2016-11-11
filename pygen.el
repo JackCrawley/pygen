@@ -360,17 +360,16 @@ extract some kind of meaningful argument."
 			;; First search for comma separated arguments.
 			(let ((previous-position (point)))
 			  (while (re-search-forward "[^ \n\t\\\\].*," nil t)
-				(let (current-argument)
-				  (setq current-argument (buffer-substring-no-properties previous-position (1- (point))))
-				  (setq current-argument (pygen-parse-single-argument current-argument))
-				  (when current-argument
-					(push current-argument arguments)
+				(let* ((current-argument (buffer-substring-no-properties previous-position (1- (point))))
+					   (parsed-argument (pygen-parse-single-argument current-argument)))
+				  (when parsed-argument
+					(push parsed-argument arguments)
 					(setq previous-position (point))))))
 			;; Now search the last, non-comma separated argument.
-			(let* ((unparsed-argument (buffer-substring-no-properties (point) (point-max)))
-				   (last-argument (pygen-parse-single-argument unparsed-argument)))
-			  (when last-argument
-				(push last-argument arguments)))
+			(let* ((last-argument (buffer-substring-no-properties (point) (point-max)))
+				   (parsed-argument (pygen-parse-single-argument last-argument)))
+			  (when parsed-argument
+				(push parsed-argument arguments)))
 			(when arguments
 			  (reverse arguments)))
 		nil))))
