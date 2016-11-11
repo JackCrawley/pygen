@@ -725,88 +725,7 @@ after all imports.
 `decorators' is an optional list of decorators to place before
   the function, as strings."
   ;; First get the cursor in position, then insert the function.
-  
-  ;; If def exists, place before def
-  ;; If class exists, place before class
-  ;; Otherwise, navigate after imports and place in front of the first statement.
   (goto-char (point-min))
-  
-  (let* (;; TODO: Replace this a method for finding the first class with
-		 ;; supplying an indent parameter to the `py-forward-class' method.
-		 (first-class-position (save-excursion
-								 (py-down-class)
-								 (py-up-class)
-								 (if (<= (point) (point-min))
-									 nil
-								   (point))))
-		 (first-def-position (save-excursion
-							   (py-down-def)
-							   (py-up-class)
-							   (if (<= (point) (point-min))
-								   nil
-								 (point))))
-		 (after-imports-position
-		  (save-excursion
-			(while (re-search-forward
-					"import *[A-Za-z_][A-Za-z_0-9].*\\|^from +[A-Za-z_][A-Za-z_0-9.]+ +import .*" nil t)
-			  ;; HACK: The above import searching regexp is dumb.  It stops
-			  ;;       once it enters a bracketed import.  This is a way of
-			  ;;       getting it to carry on, however it looks fragile to
-			  ;;       me.
-			  (when (looking-back "(")
-				(search-forward ")")))
-			(point)))
-		 (first-expression-position (save-excursion
-									  (goto-char after-imports-position)
-									  (py-forward-expression)
-									  (py-beginning-of-expression)
-									  (if (<= (point) after-imports-position)
-										  nil
-										(point)))))
-	
-	(cond ((and first-class-position first-def-position)
-		   ;; If class and definition both exist, move to the earlier
-		   ;; of the two.
-		   (if (< first-class-position first-def-position)
-			   (goto-char first-class-position)
-			 (goto-char first-def-position)))
-		  (first-class-position
-		   (goto-char first-class-position))
-		  (first-def-position
-		   (goto-char first-def-position))
-		  (first-expression-position
-		   (goto-char first-expression-position))
-		  (t
-		   (goto-char (point-max)))))
-  ;; Now the cursor is in position, the function can be created.
-  (unless function-name
-	(setq function-name (read-string "Enter function name: ")))
-  (beginning-of-line)
-  (let ((start-position (point)))
-	(insert "\n\n\n")
-	(goto-char start-position))
-  (while decorators
-	(insert (pop decorators))
-	(insert "\n"))
-  (insert (concat "def " function-name "("))
-  (while arguments
-	(let ((argument (pop arguments)))
-	  (if arguments
-		  (insert (concat argument ", "))
-		(insert argument))))
-  (insert "):")
-  (py-newline-and-indent)
-  (let ((end-position (point)))
-	;; (insert "pass")
-	(goto-char end-position)))
-
-
-(defun pygen-create-new-class-in-module (arguments &optional class-name)
-  "Create a new function in the current module.
-
-Creates the function at the top level of the module, immediately
-after all imports."
-  ;; First get the cursor in position, then insert the function.
   
   ;; If def exists, place before def
   ;; If class exists, place before class
@@ -843,7 +762,87 @@ after all imports."
 									  (if (<= (point) after-imports-position)
 										  nil
 										(point)))))
-	(goto-char (point-min))
+	(cond ((and first-class-position first-def-position)
+		   ;; If class and definition both exist, move to the earlier
+		   ;; of the two.
+		   (if (< first-class-position first-def-position)
+			   (goto-char first-class-position)
+			 (goto-char first-def-position)))
+		  (first-class-position
+		   (goto-char first-class-position))
+		  (first-def-position
+		   (goto-char first-def-position))
+		  (first-expression-position
+		   (goto-char first-expression-position))
+		  (t
+		   (goto-char (point-max)))))
+  
+  ;; Now the cursor is in position, the function can be created.
+  (unless function-name
+	(setq function-name (read-string "Enter function name: ")))
+  (beginning-of-line)
+  (let ((start-position (point)))
+	(insert "\n\n\n")
+	(goto-char start-position))
+  (while decorators
+	(insert (pop decorators))
+	(insert "\n"))
+  (insert (concat "def " function-name "("))
+  (while arguments
+	(let ((argument (pop arguments)))
+	  (if arguments
+		  (insert (concat argument ", "))
+		(insert argument))))
+  (insert "):")
+  (py-newline-and-indent)
+  (let ((end-position (point)))
+	;; (insert "pass")
+	(goto-char end-position)))
+
+
+(defun pygen-create-new-class-in-module (arguments &optional class-name)
+  "Create a new function in the current module.
+
+Creates the function at the top level of the module, immediately
+after all imports."
+  ;; First get the cursor in position, then insert the function.
+  (goto-char (point-min))
+  
+  ;; If def exists, place before def
+  ;; If class exists, place before class
+  ;; Otherwise, navigate after imports and place in front of the first statement.
+  (let* (;; TODO: Replace this a method for finding the first class with
+		 ;; supplying an indent parameter to the `py-forward-class' method.
+		 (first-class-position (save-excursion
+								 (py-down-class)
+								 (py-up-class)
+								 (if (eq (point) (point-min))
+									 nil
+								   (point))))
+		 (first-def-position (save-excursion
+							   (py-down-class)
+							   (py-up-class)
+							   (if (eq (point) (point-min))
+								   nil
+								 (point))))
+		 (after-imports-position
+		  (save-excursion
+			(while (re-search-forward
+					"import *[A-Za-z_][A-Za-z_0-9].*\\|^from +[A-Za-z_][A-Za-z_0-9.]+ +import .*" nil t)
+			  ;; HACK: The above import searching regexp is dumb.  It stops
+			  ;;       once it enters a bracketed import.  This is a way of
+			  ;;       getting it to carry on, however it looks fragile to
+			  ;;       me.
+			  (when (looking-back "(")
+				(search-forward ")")))
+			(point)))
+		 (first-expression-position (save-excursion
+									  (goto-char after-imports-position)
+									  (py-forward-expression)
+									  (py-beginning-of-expression)
+									  (if (<= (point) after-imports-position)
+										  nil
+										(point)))))
 	(cond ((and first-class-position first-def-position)
 		   ;; If class and definition both exist, move to the earlier
 		   ;; of the two.
