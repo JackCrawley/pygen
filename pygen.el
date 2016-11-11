@@ -1364,6 +1364,7 @@ This is basically just a wrapper for `py-insert-super'"
 (define-key pygen-mode-map (kbd "C-c g .") 'pygen-toggle-selfify-symbol)
 
 
+;;;###autoload
 (define-minor-mode pygen-mode
   "Minor mode that allows python code-generation commands to be used.
 
@@ -1415,8 +1416,6 @@ GitHub repo for this project."
 ;; FIXME: module functions are generated at the bottom of the module,
 ;; rather than in the most logical position. Does not apply to
 ;; classes.
-
-;; TODO: Add autoload cookie.
 
 
 (provide 'pygen)
