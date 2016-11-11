@@ -1401,8 +1401,6 @@ GitHub repo for this project."
 ;; TODO: Work out if default python-mode follow command can be
 ;; used. `py-find-definition'
 
-;; TODO: Test everything still works after massive refactoring
-
 ;; TODO: Set mark before jumping into generated code
 
 ;; TODO: Use YASnippets for generated code if the user has YASnippet
@@ -1411,11 +1409,6 @@ GitHub repo for this project."
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
 ;; Instead, it just creates a function called MyClass.
-
-;; FIXME: Can't generate function if the enclosing class is in the
-;; current module, for example:
-;;     MyClass.my_function()
-;; where MyClass is a class in the current module.
 
 ;; FIXME: Can't currently cope with bracketed imports, e.g:
 ;;     `from X import (...)'
