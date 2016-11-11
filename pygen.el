@@ -917,7 +917,9 @@ function.  Leave this as nil if no decorators should be added."
 		(let ((current-decorator (pop decorators)))
 		  (insert indentation-string)
 		  (insert current-decorator)
+		  (py-mark-line)
 		  (py-shift-indent-right)
+		  (pop-to-mark-command)
 		  (when (string= current-decorator "@staticmethod")
 			(setq static-function t))
 		  (insert "\n")))
@@ -1422,7 +1424,7 @@ GitHub repo for this project."
 ;; should throw an error.
 
 ;; FIXME: module functions are generated at the bottom of the module,
-;; rather than iin the most logical position.
+;; rather than in the most logical position.
 
 
 (provide 'pygen)
