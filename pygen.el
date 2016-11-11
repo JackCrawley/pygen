@@ -909,8 +909,6 @@ function.  Leave this as nil if no decorators should be added."
 							  (point)))
 		 (indentation-string (buffer-substring-no-properties
 							  indentation-start indentation-end)))
-	(beginning-of-line)
-	(goto-char indentation-end)
 	(py-end-of-class)
 	(insert "\n\n")
 
@@ -929,17 +927,24 @@ function.  Leave this as nil if no decorators should be added."
 	  (unless function-name
 		(setq function-name (read-string "Enter function name: ")))
 	  (insert (concat "def " function-name "("))
+	  ;; For member functions, insert the "self" argument
 	  (unless static-function
 		(insert "self")
 		(when arguments
 		  (insert ", "))))
+	;; Now insert each argument
 	(while arguments
 	  (let ((argument (pop arguments)))
 		(if arguments
 			(insert (concat argument ", "))
 		  (insert argument))))
 	(insert "):")
+	;; HACK: `py-shift-indent-right' will indent any following lines
+	;; as well.  Wrapping the current line with the region before
+	;; indenting fixes this. 
+	(py-mark-line)
 	(py-shift-indent-right)
+	(pop-to-mark-command)
 	(py-newline-and-indent)
 
 	(let ((end-position (point)))
