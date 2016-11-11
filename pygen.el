@@ -723,6 +723,7 @@ after all imports.
 
 `decorators' is an optional list of decorators to place before
   the function, as strings."
+  (push-mark nil t)
   ;; First get the cursor in position, then insert the function.
   (goto-char (point-min))
   
@@ -804,6 +805,7 @@ after all imports.
 
 Creates the function at the top level of the module, immediately
 after all imports."
+  (push-mark nil t)
   ;; First get the cursor in position, then insert the function.
   (goto-char (point-min))
   
@@ -1396,8 +1398,6 @@ GitHub repo for this project."
 
 ;; TODO: Work out if default python-mode follow command can be
 ;; used. `py-find-definition'
-
-;; TODO: Set mark before jumping into generated code
 
 ;; TODO: Use YASnippets for generated code if the user has YASnippet
 ;; installed.
