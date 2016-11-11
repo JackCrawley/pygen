@@ -779,26 +779,24 @@ after all imports.
 		  (t
 		   (goto-char (point-max)))))
   ;; Now the cursor is in position, the function can be created.
-  (let (start-position
-		end-position)
-	(unless function-name
-	  (setq function-name (read-string "Enter function name: ")))
-	(beginning-of-line)
-	(setq start-position (point))
+  (unless function-name
+	(setq function-name (read-string "Enter function name: ")))
+  (beginning-of-line)
+  (let ((start-position (point)))
 	(insert "\n\n\n")
-	(goto-char start-position)
-	(while decorators
-	  (insert (pop decorators))
-	  (insert "\n"))
-	(insert (concat "def " function-name "("))
-	(while arguments
-	  (let ((argument (pop arguments)))
-		(if arguments
-			(insert (concat argument ", "))
-		  (insert argument))))
-	(insert "):")
-	(py-newline-and-indent)
-	(setq end-position (point))
+	(goto-char start-position))
+  (while decorators
+	(insert (pop decorators))
+	(insert "\n"))
+  (insert (concat "def " function-name "("))
+  (while arguments
+	(let ((argument (pop arguments)))
+	  (if arguments
+		  (insert (concat argument ", "))
+		(insert argument))))
+  (insert "):")
+  (py-newline-and-indent)
+  (let ((end-position (point)))
 	;; (insert "pass")
 	(goto-char end-position)))
 
