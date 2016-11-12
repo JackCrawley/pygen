@@ -1412,6 +1412,8 @@ GitHub repo for this project."
 
 ;; FIXME: Can't currently cope with bracketed imports, e.g:
 ;;     `from X import (...)'
+;; Usually works, but sometimes breaks. Need to find the conditions
+;; under which it breaks.
 
 ;; FIXME: Generating a static function when the parent is "self"
 ;; should throw an error.
