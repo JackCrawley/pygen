@@ -198,9 +198,10 @@ point in the current module."
 		(lowest-indent nil)
 		(current-definition-position nil))
 	(goto-char (point-min))
-	(while (re-search-forward (concat "\\(class\\|def\\)[ \t\n][ \t\n\\\\]*"
-									  name-to-find)
-							  nil t)
+	(while (and (re-search-forward (concat "^[ \t]*\\(class\\|def\\)[ \t\n][ \t\n\\\\]*"
+										   name-to-find)
+								   nil t)
+				(not (in-string-p)))
 	  (if lowest-indent
 		  (let (indentation-length (py-indentation-of-statement))
 			(when (> lowest-indent indentation-length)
@@ -459,54 +460,56 @@ can take time, so it's optimal to only do it once."
 
 (defun pygen-def-at-point ()
   "Check whether the point is currently in a def."
-  (let ((start-point (point))
-		(region-was-active (region-active-p))
-		error-marking-def)
-	(condition-case nil
-		(py-mark-def)
-	  (wrong-type-argument (goto-char start-point)
-						   (setq error-marking-def t)))
-	(if (and (<= (region-beginning) start-point)
-			 (>= (region-end) start-point)
-			 (not (= start-point (mark)))
-			 (not error-marking-def))
-		(progn
-		  (pop-mark)
-		  (goto-char start-point)
-		  (when region-was-active
-			(activate-mark))
-		  t)
-	  (pop-mark)
-	  (goto-char start-point)
-	  (when region-was-active
-		(activate-mark))
-	  nil)))
+  (save-excursion
+	(let ((start-point (point))
+		  (region-was-active (region-active-p))
+		  error-marking-def)
+	  (condition-case nil
+		  (py-mark-def)
+		(wrong-type-argument (goto-char start-point)
+							 (setq error-marking-def t)))
+	  (if (and (<= (region-beginning) start-point)
+			   (>= (region-end) start-point)
+			   (not (= start-point (mark)))
+			   (not error-marking-def))
+		  (progn
+			(pop-mark)
+			;; (goto-char start-point)
+			;; (when region-was-active
+			;;   (activate-mark))
+			t)
+		(pop-mark)
+		;; (goto-char start-point)
+		;; (when region-was-active
+		;; 	(activate-mark))
+		nil))))
 
 
 (defun pygen-class-at-point ()
   "Check whether the point is currently in a class."
-  (let ((start-point (point))
-		(region-was-active (region-active-p))
-		error-marking-class)
-	(condition-case nil
-		(py-mark-class)
-	  (wrong-type-argument (goto-char start-point)
-						   (setq error-marking-class t)))
-	(if (and (<= (region-beginning) start-point)
-			 (>= (region-end) start-point)
-			 (not (= start-point (mark)))
-			 (not error-marking-class))
-		(progn
-		  (pop-mark)
-		  (goto-char start-point)
-		  (when region-was-active
-			(activate-mark))
-		  t)
-	  (pop-mark)
-	  (goto-char start-point)
-	  (when region-was-active
-		(activate-mark))
-	  nil)))
+  (save-excursion
+	(let ((start-point (point))
+		  (region-was-active (region-active-p))
+		  error-marking-class)
+	  (condition-case nil
+		  (py-mark-class)
+		(wrong-type-argument (goto-char start-point)
+							 (setq error-marking-class t)))
+	  (if (and (<= (region-beginning) start-point)
+			   (>= (region-end) start-point)
+			   (not (= start-point (mark)))
+			   (not error-marking-class))
+		  (progn
+			(pop-mark)
+			;; (goto-char start-point)
+			;; (when region-was-active
+			;;   (activate-mark))
+			t)
+		(pop-mark)
+		;; (goto-char start-point)
+		;; (when region-was-active
+		;;   (activate-mark))
+		nil))))
 
 
 (defun pygen-argument-already-exists (argument &optional in-function)
@@ -1416,6 +1419,16 @@ GitHub repo for this project."
 ;; FIXME: module functions are generated at the bottom of the module,
 ;; rather than in the most logical position. Does not apply to
 ;; classes.
+
+;; FIXME: function/class generation generates below non-class lines
+;; that contain "class". For example, keys in dictionaries. Turns out
+;; this is a problem with python-mode's class navigation
+;; functions. Need to re-implement them myself.
+
+;; TODO: Reimplement class navigation functions to find the first
+;; class in the module myself, to get around python-mode's errors with
+;; these functions. Could be worth filing a ticket with the python-mode
+;; devs myself too.
 
 
 (provide 'pygen)
