@@ -163,7 +163,11 @@
 
 (defun pygen-get-expression-bounds ()
   "Get the bounds of the function under point."
-  ;; TODO: Expand this function so it can select any expression style.
+  ;; TODO: Expand this function so it can select any expression style,
+  ;; for example:
+  ;;     my_function (argument_one, argument_two)
+  ;;     my_function "this is the argument"
+  ;; Currently, functions like this won't work.  
   (save-excursion
 	(when (looking-back "[^A-Za-z0-9._*]")
 	  (right-char))
