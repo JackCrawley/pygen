@@ -169,8 +169,13 @@
   ;;     my_function "this is the argument"
   ;; Currently, functions like this won't work.  
   (save-excursion
+	;; `python-mode' has a bug where a partial expression can't be
+	;; selected if the point is on the first character of the
+	;; expression. This compensates by moving one character right in
+	;; that situation.
 	(when (looking-back "[^A-Za-z0-9._*]")
 	  (right-char))
+	;; Now select the partial expression.
 	(py-partial-expression)
 	(cons (region-beginning) (region-end))))
 
