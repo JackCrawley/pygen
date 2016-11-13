@@ -673,6 +673,7 @@ can take time, so it's optimal to only do it once.
   ;; Now check if the function exists
   ;; TODO: Optimise this. Find a faster method of checking if it exists.
   ;;       Perhaps if flycheck is open, use that?
+  ;; TODO: Local expression exists checking
   (save-excursion
 	(let ((expression-exists nil))
 	  (goto-char (car bounds))
