@@ -141,6 +141,14 @@
 ;;   :group 'pygen)
 
 
+(defvar pygen-re-top-level-class-or-def-definition
+  "^\\(class\\|def\\)[ \t\n\\\\]+[A-Za-z0-9_*]+"
+  "Regular expression for finding a class or def definition.
+
+Only searches for definitions at the top level.  If a definition
+is indented, it won't be matched.")
+
+
 (defun pygen-in-string-p ()
   "Checks if the point is currently in a string.
 
@@ -758,20 +766,13 @@ after all imports.
   ;; If def exists, place before def
   ;; If class exists, place before class
   ;; Otherwise, navigate after imports and place in front of the first statement.
-  (let* (;; TODO: Replace this a method for finding the first class with
-		 ;; supplying an indent parameter to the `py-forward-class' method.
-		 (first-class-position (save-excursion
-								 (py-down-class)
-								 (py-up-class)
-								 (if (eq (point) (point-min))
-									 nil
-								   (point))))
-		 (first-def-position (save-excursion
-							   (py-down-class)
-							   (py-up-class)
-							   (if (eq (point) (point-min))
-								   nil
-								 (point))))
+  (let* ((first-class-or-def-position (save-excursion
+										(if (re-search-forward
+											 pygen-re-top-level-class-or-def-definition nil t)
+											(progn
+											  (py-beginning-of-def-or-class)
+											  (point))
+										  nil)))
 		 (after-imports-position
 		  (save-excursion
 			(while (re-search-forward
@@ -787,17 +788,11 @@ after all imports.
 									  (goto-char after-imports-position)
 									  (py-forward-expression)
 									  (py-beginning-of-expression)
-									  (if (<= (point) after-imports-position)
+									  (if (< (point) after-imports-position)
 										  nil
 										(point)))))
-	(cond ((and first-class-position first-def-position)
-		   ;; If class and definition both exist, move to the earlier
-		   ;; of the two.
-		   (goto-char (min first-class-position first-def-position)))
-		  (first-class-position
-		   (goto-char first-class-position))
-		  (first-def-position
-		   (goto-char first-def-position))
+	(cond (first-class-or-def-position
+		   (goto-char first-class-or-def-position))
 		  (first-expression-position
 		   (goto-char first-expression-position))
 		  (t
@@ -838,20 +833,13 @@ after all imports."
   ;; If def exists, place before def
   ;; If class exists, place before class
   ;; Otherwise, navigate after imports and place in front of the first statement.
-  (let* (;; TODO: Replace this a method for finding the first class with
-		 ;; supplying an indent parameter to the `py-forward-class' method.
-		 (first-class-position (save-excursion
-								 (py-down-class)
-								 (py-up-class)
-								 (if (eq (point) (point-min))
-									 nil
-								   (point))))
-		 (first-def-position (save-excursion
-							   (py-down-class)
-							   (py-up-class)
-							   (if (eq (point) (point-min))
-								   nil
-								 (point))))
+  (let* ((first-class-or-def-position (save-excursion
+										(if (re-search-forward
+											 pygen-re-top-level-class-or-def-definition nil t)
+											(progn
+											  (py-beginning-of-def-or-class)
+											  (point))
+										  nil)))
 		 (after-imports-position
 		  (save-excursion
 			(while (re-search-forward
@@ -867,17 +855,11 @@ after all imports."
 									  (goto-char after-imports-position)
 									  (py-forward-expression)
 									  (py-beginning-of-expression)
-									  (if (<= (point) after-imports-position)
+									  (if (< (point) after-imports-position)
 										  nil
 										(point)))))
-	(cond ((and first-class-position first-def-position)
-		   ;; If class and definition both exist, move to the earlier
-		   ;; of the two.
-		   (goto-char (min first-class-position first-def-position)))
-		  (first-class-position
-		   (goto-char first-class-position))
-		  (first-def-position
-		   (goto-char first-def-position))
+	(cond (first-class-or-def-position
+		   (goto-char first-class-or-def-position))
 		  (first-expression-position
 		   (goto-char first-expression-position))
 		  (t
