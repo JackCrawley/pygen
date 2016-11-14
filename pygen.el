@@ -1416,6 +1416,10 @@ GitHub repo for this project."
 ;; Warnings should be more explicit if non-keyword arguments are
 ;; added, removed or changed.
 
+;; TODO: Make sure that the function py-forward-class and similar
+;; functions aren't used as they aren't that robust. They often elicit
+;; false positives.
+
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
 ;; Instead, it just creates a function called MyClass.
@@ -1430,16 +1434,6 @@ GitHub repo for this project."
 
 ;; FIXME: Should generate module functions above all other classes and
 ;; functions.
-
-;; FIXME: function/class generation generates below non-class lines
-;; that contain "class". For example, keys in dictionaries. Turns out
-;; this is a problem with python-mode's class navigation
-;; functions. Need to re-implement them myself.
-
-;;     TODO: Reimplement class navigation functions to find the first
-;;     class in the module myself, to get around python-mode's errors
-;;     with these functions. Could be worth filing a ticket with the
-;;     python-mode devs myself too.
 
 
 (provide 'pygen)
