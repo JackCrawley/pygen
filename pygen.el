@@ -342,7 +342,9 @@ extract some kind of meaningful argument."
 
 
 (defun pygen-get-expression-arguments (&optional bounds verified)
-  "Get the list of arguments for the current expression."
+  "Get the list of arguments for the current expression.
+
+Arguments are returned as a list of names."
   ;; Get input parameters if not provided
   (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
@@ -372,7 +374,6 @@ extract some kind of meaningful argument."
 			(let ((previous-position (point)))
 			  (while (and (search-forward "," nil t)
 						  (not (in-string-p)))
-				(message (buffer-substring-no-properties previous-position (1- (point))))
 				(let* ((current-argument (buffer-substring-no-properties previous-position (1- (point))))
 					   (parsed-argument (pygen-parse-single-argument current-argument)))
 				  (when parsed-argument
