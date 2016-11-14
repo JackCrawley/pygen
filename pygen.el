@@ -285,7 +285,8 @@ point in the current module."
 	(with-temp-buffer
 	  (insert full-expression)
 	  (goto-char 1)
-	  ;; If the expression has arguments (within the partial expression)
+	  ;; If the expression has arguments, select up to where the name
+	  ;; ends. Otherwise, select the entire name.
 	  (if (re-search-forward "[^A-Za-z0-9_]" nil t)
 		  (buffer-substring-no-properties 1 (1- (point)))
 		full-expression))))
@@ -353,11 +354,13 @@ extract some kind of meaningful argument."
 		  (arguments '()))
 	  (if arguments-string
 		  (with-temp-buffer
+			(message (concat "[arguments string]: '" arguments-string "'"))
 			(insert arguments-string)
 			(goto-char 1)
 			;; Clean up nested s-expressions (dicts, strings, nested
-			;; function calls, etc.). Each nested s-exp should represent
-			;; 1 argument and have its own commas removed.
+			;; function calls, etc.). This makes things a lot easier
+			;; to parse, as it removes nested symbols that might be
+			;; mistaken for arguments.
 			(save-excursion
 			  (while (re-search-forward "[([{\"]" nil t)
 				(left-char 1)
@@ -365,10 +368,15 @@ extract some kind of meaningful argument."
 				  (forward-sexp)
 				  (delete-region current-start (point))
 				  (insert ""))))
+			(message (concat "[arguments string after clearing]: '"
+							 (buffer-substring-no-properties (point-min) (point-max))
+							 "'"))
 			;; Now repeatedly try to find arguments.
 			;; First search for comma separated arguments.
 			(let ((previous-position (point)))
-			  (while (re-search-forward "[^ \n\t\\\\].*," nil t)
+			  (while (and (search-forward "," nil t)
+						  (not (in-string-p)))
+				(message (buffer-substring-no-properties previous-position (1- (point))))
 				(let* ((current-argument (buffer-substring-no-properties previous-position (1- (point))))
 					   (parsed-argument (pygen-parse-single-argument current-argument)))
 				  (when parsed-argument
