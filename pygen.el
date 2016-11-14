@@ -1450,9 +1450,8 @@ GitHub repo for this project."
 ;; FIXME: Generating a static function when the parent is "self"
 ;; should throw an error.
 
-;; FIXME: module functions are generated at the bottom of the module,
-;; rather than in the most logical position. Does not apply to
-;; classes.
+;; FIXME: Should generate module functions above all other classes and
+;; functions.
 
 ;; FIXME: function/class generation generates below non-class lines
 ;; that contain "class". For example, keys in dictionaries. Turns out
