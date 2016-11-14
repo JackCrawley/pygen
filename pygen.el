@@ -4,7 +4,7 @@
 
 ;; Author: Jack Crawley <http://www.github.com/jackcrawley>
 ;; Keywords: python, code generation
-;; Version: 0.2.2
+;; Version: 0.2.3
 ;; Package-Requires: ((elpy "1.12.0") (python-mode "6.2.2"))
 ;; URL: https://github.com/JackCrawley/pygen/
 
@@ -116,7 +116,7 @@
   :prefix "pygen-")
 
 
-(defconst pygen-version "0.2.2")
+(defconst pygen-version "0.2.3")
 
 
 (defcustom pygen-mode-hook nil
@@ -141,6 +141,16 @@
 ;;   :group 'pygen)
 
 
+(defun pygen-in-string-p ()
+  "Checks if the point is currently in a string.
+
+Substitute for the `in-string-p' function, which is not available
+in earlier Emacs versions. Will use `in-string-p' if possible."
+  (if (fboundp 'in-string-p)
+	  (in-string-p)
+	(elt (syntax-ppss) 3)))
+
+
 (defun pygen-verify-environment ()
   "Verify that pygen has the required environments installed."
   ;; TODO: Verify all python-mode functions are available.
@@ -163,10 +173,19 @@
 
 (defun pygen-get-expression-bounds ()
   "Get the bounds of the function under point."
-  ;; TODO: Expand this function so it can select any expression style.
+  ;; TODO: Expand this function so it can select any expression style,
+  ;; for example:
+  ;;     my_function (argument_one, argument_two)
+  ;;     my_function "this is the argument"
+  ;; Currently, functions like this won't work.  
   (save-excursion
+	;; `python-mode' has a bug where a partial expression can't be
+	;; selected if the point is on the first character of the
+	;; expression. This compensates by moving one character right in
+	;; that situation.
 	(when (looking-back "[^A-Za-z0-9._*]")
 	  (right-char))
+	;; Now select the partial expression.
 	(py-partial-expression)
 	(cons (region-beginning) (region-end))))
 
@@ -276,7 +295,8 @@ point in the current module."
 	(with-temp-buffer
 	  (insert full-expression)
 	  (goto-char 1)
-	  ;; If the expression has arguments (within the partial expression)
+	  ;; If the expression has arguments, select up to where the name
+	  ;; ends. Otherwise, select the entire name.
 	  (if (re-search-forward "[^A-Za-z0-9_]" nil t)
 		  (buffer-substring-no-properties 1 (1- (point)))
 		full-expression))))
@@ -332,7 +352,9 @@ extract some kind of meaningful argument."
 
 
 (defun pygen-get-expression-arguments (&optional bounds verified)
-  "Get the list of arguments for the current expression."
+  "Get the list of arguments for the current expression.
+
+Arguments are returned as a list of names."
   ;; Get input parameters if not provided
   (unless bounds
 	(setq bounds (pygen-get-expression-bounds)))
@@ -347,8 +369,9 @@ extract some kind of meaningful argument."
 			(insert arguments-string)
 			(goto-char 1)
 			;; Clean up nested s-expressions (dicts, strings, nested
-			;; function calls, etc.). Each nested s-exp should represent
-			;; 1 argument and have its own commas removed.
+			;; function calls, etc.). This makes things a lot easier
+			;; to parse, as it removes nested symbols that might be
+			;; mistaken for arguments.
 			(save-excursion
 			  (while (re-search-forward "[([{\"]" nil t)
 				(left-char 1)
@@ -359,7 +382,8 @@ extract some kind of meaningful argument."
 			;; Now repeatedly try to find arguments.
 			;; First search for comma separated arguments.
 			(let ((previous-position (point)))
-			  (while (re-search-forward "[^ \n\t\\\\].*," nil t)
+			  (while (and (search-forward "," nil t)
+						  (not (pygen-in-string-p)))
 				(let* ((current-argument (buffer-substring-no-properties previous-position (1- (point))))
 					   (parsed-argument (pygen-parse-single-argument current-argument)))
 				  (when parsed-argument
@@ -396,7 +420,7 @@ WARNING: Does not work with star arguments."
 	  (goto-char 1)
 	  (let ((last-position (point)))
 		(while (search-forward "," nil t)
-		  (unless (in-string-p)
+		  (unless (pygen-in-string-p)
 			(push (buffer-substring-no-properties last-position (- (point) 1)) individual-arguments-strings)
 			(setq last-position (point))))
 		(when (re-search-forward "[A-Za-z0-9_*]" nil t)
@@ -564,7 +588,7 @@ can take time, so it's optimal to only do it once.
 	  (let ((star-args-present nil)
 			first-star-argument) 
 		(while (search-backward "*" start-position t)
-		  (unless (in-string-p)
+		  (unless (pygen-in-string-p)
 			(setq star-args-present t)
 			(setq first-star-argument (point))))
 		;; If another argument already exists, argument must be inserted
@@ -637,7 +661,7 @@ can take time, so it's optimal to only do it once.
 		(let ((star-args-present nil)
 			  first-star-argument)
 		  (while (search-backward "*" start-position t)
-			(unless (in-string-p)
+			(unless (pygen-in-string-p)
 			  (setq star-args-present t)
 			  (setq first-star-argument (point))))
 		  (if star-args-present
@@ -664,6 +688,7 @@ can take time, so it's optimal to only do it once.
   ;; Now check if the function exists
   ;; TODO: Optimise this. Find a faster method of checking if it exists.
   ;;       Perhaps if flycheck is open, use that?
+  ;; TODO: Local expression exists checking
   (save-excursion
 	(let ((expression-exists nil))
 	  (goto-char (car bounds))
