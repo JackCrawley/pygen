@@ -141,6 +141,16 @@
 ;;   :group 'pygen)
 
 
+(defun pygen-in-string-p ()
+  "Checks if the point is currently in a string.
+
+Substitute for the `in-string-p' function, which is not available
+in earlier Emacs versions. Will use `in-string-p' if possible."
+  (if (fboundp 'in-string-p)
+	  (in-string-p)
+	(elt (syntax-ppss) 3)))
+
+
 (defun pygen-verify-environment ()
   "Verify that pygen has the required environments installed."
   ;; TODO: Verify all python-mode functions are available.
@@ -373,7 +383,7 @@ Arguments are returned as a list of names."
 			;; First search for comma separated arguments.
 			(let ((previous-position (point)))
 			  (while (and (search-forward "," nil t)
-						  (not (in-string-p)))
+						  (not (pygen-in-string-p)))
 				(let* ((current-argument (buffer-substring-no-properties previous-position (1- (point))))
 					   (parsed-argument (pygen-parse-single-argument current-argument)))
 				  (when parsed-argument
@@ -410,7 +420,7 @@ WARNING: Does not work with star arguments."
 	  (goto-char 1)
 	  (let ((last-position (point)))
 		(while (search-forward "," nil t)
-		  (unless (in-string-p)
+		  (unless (pygen-in-string-p)
 			(push (buffer-substring-no-properties last-position (- (point) 1)) individual-arguments-strings)
 			(setq last-position (point))))
 		(when (re-search-forward "[A-Za-z0-9_*]" nil t)
@@ -578,7 +588,7 @@ can take time, so it's optimal to only do it once.
 	  (let ((star-args-present nil)
 			first-star-argument) 
 		(while (search-backward "*" start-position t)
-		  (unless (in-string-p)
+		  (unless (pygen-in-string-p)
 			(setq star-args-present t)
 			(setq first-star-argument (point))))
 		;; If another argument already exists, argument must be inserted
@@ -651,7 +661,7 @@ can take time, so it's optimal to only do it once.
 		(let ((star-args-present nil)
 			  first-star-argument)
 		  (while (search-backward "*" start-position t)
-			(unless (in-string-p)
+			(unless (pygen-in-string-p)
 			  (setq star-args-present t)
 			  (setq first-star-argument (point))))
 		  (if star-args-present
