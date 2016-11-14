@@ -1431,6 +1431,13 @@ GitHub repo for this project."
 ;; TODO: Use YASnippets for generated code if the user has YASnippet
 ;; installed.
 
+;; TODO: Raise an error if a function/class already exists.
+
+;; TODO: If the user regenerates a function/class that already exists,
+;; prompt them to ask whether they want the signature modified.
+;; Warnings should be more explicit if non-keyword arguments are
+;; added, removed or changed.
+
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
 ;; Instead, it just creates a function called MyClass.
