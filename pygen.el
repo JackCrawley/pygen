@@ -1459,10 +1459,10 @@ GitHub repo for this project."
 ;; this is a problem with python-mode's class navigation
 ;; functions. Need to re-implement them myself.
 
-;; TODO: Reimplement class navigation functions to find the first
-;; class in the module myself, to get around python-mode's errors with
-;; these functions. Could be worth filing a ticket with the python-mode
-;; devs myself too.
+;;     TODO: Reimplement class navigation functions to find the first
+;;     class in the module myself, to get around python-mode's errors
+;;     with these functions. Could be worth filing a ticket with the
+;;     python-mode devs myself too.
 
 
 (provide 'pygen)
