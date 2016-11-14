@@ -793,9 +793,7 @@ after all imports.
 	(cond ((and first-class-position first-def-position)
 		   ;; If class and definition both exist, move to the earlier
 		   ;; of the two.
-		   (if (< first-class-position first-def-position)
-			   (goto-char first-class-position)
-			 (goto-char first-def-position)))
+		   (goto-char (min first-class-position first-def-position)))
 		  (first-class-position
 		   (goto-char first-class-position))
 		  (first-def-position
@@ -875,9 +873,7 @@ after all imports."
 	(cond ((and first-class-position first-def-position)
 		   ;; If class and definition both exist, move to the earlier
 		   ;; of the two.
-		   (if (< first-class-position first-def-position)
-			   (goto-char first-class-position)
-			 (goto-char first-def-position)))
+		   (goto-char (min first-class-position first-def-position)))
 		  (first-class-position
 		   (goto-char first-class-position))
 		  (first-def-position
