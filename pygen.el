@@ -354,7 +354,6 @@ extract some kind of meaningful argument."
 		  (arguments '()))
 	  (if arguments-string
 		  (with-temp-buffer
-			(message (concat "[arguments string]: '" arguments-string "'"))
 			(insert arguments-string)
 			(goto-char 1)
 			;; Clean up nested s-expressions (dicts, strings, nested
@@ -368,9 +367,6 @@ extract some kind of meaningful argument."
 				  (forward-sexp)
 				  (delete-region current-start (point))
 				  (insert ""))))
-			(message (concat "[arguments string after clearing]: '"
-							 (buffer-substring-no-properties (point-min) (point-max))
-							 "'"))
 			;; Now repeatedly try to find arguments.
 			;; First search for comma separated arguments.
 			(let ((previous-position (point)))
