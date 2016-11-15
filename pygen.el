@@ -1424,10 +1424,13 @@ GitHub repo for this project."
 ;;     variable = MyClass(function_name)
 ;; Instead, it just creates a function called MyClass.
 
-;; FIXME: Can't currently cope with bracketed imports, e.g:
+;; FIXME: Can't always cope with bracketed imports, e.g:
 ;;     `from X import (...)'
 ;; Usually works, but sometimes breaks. Need to find the conditions
 ;; under which it breaks.
+;; The conditions may have actually been the same conditions that
+;; caused a different error, which is now fixed. Wait for this error
+;; to pop up again before isolating it.
 
 ;; FIXME: Generating a static function when the parent is "self"
 ;; should throw an error. Also need to update the gif animation that
