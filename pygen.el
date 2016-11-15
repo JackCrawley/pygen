@@ -1435,6 +1435,9 @@ GitHub repo for this project."
 ;; functions aren't used as they aren't that robust. They often elicit
 ;; false positives.
 
+;; TODO: Automatic inference of whether the user wants a static or a
+;; member function.
+
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
 ;; Instead, it just creates a function called MyClass.
