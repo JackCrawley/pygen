@@ -232,13 +232,13 @@ in earlier Emacs versions. Will use `in-string-p' if possible."
 (defun pygen-navigate-to-definition-in-module ()
   "Attempts to navigate to the definition of the class under
 point in the current module."
-  ;; TODO: Find all instances of the current class in the current
-  ;; module, and record the indentation level.
   (let ((start-position (point))
 		(name-to-find (thing-at-point 'symbol))
 		(lowest-indent nil)
 		(current-definition-position nil))
 	(goto-char (point-min))
+	;; TODO: Extract this regexp into a variable
+	;; (class/def at any level)
 	(while (and (re-search-forward (concat "^[ \t]*\\(class\\|def\\)[ \t\n][ \t\n\\\\]*"
 										   name-to-find)
 								   nil t)
