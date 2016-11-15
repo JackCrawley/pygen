@@ -1430,10 +1430,8 @@ GitHub repo for this project."
 ;; under which it breaks.
 
 ;; FIXME: Generating a static function when the parent is "self"
-;; should throw an error.
-
-;; FIXME: Should generate module functions above all other classes and
-;; functions.
+;; should throw an error. Also need to update the gif animation that
+;; does just this.
 
 
 (provide 'pygen)
