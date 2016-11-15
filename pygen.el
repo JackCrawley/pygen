@@ -1394,9 +1394,6 @@ GitHub repo for this project."
 ;; TODO: Auto-generation of star args from arguments named "args" and
 ;; "kwargs".
 ;; https://pythontips.com/2013/08/04/args-and-kwargs-in-python-explained/
-;;
-;; Once that is done, the package should be ready for
-;; deployment. Possibly add in some default keybindings?
 
 ;; TODO: Possibly have a verification function when pygen commands are
 ;; called to ensure the required packages are installed?
