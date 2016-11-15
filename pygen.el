@@ -1454,6 +1454,9 @@ GitHub repo for this project."
 ;; should throw an error. Also need to update the gif animation that
 ;; does just this.
 
+;; FIXME: Allow generating member functions in the local module using
+;; instances of a class, rather than the "self" keyword.
+
 
 (provide 'pygen)
 ;;; pygen.el ends here
