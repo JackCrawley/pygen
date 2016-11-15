@@ -1376,7 +1376,7 @@ This is basically just a wrapper for `py-insert-super'"
 (define-key pygen-mode-map (kbd "C-c g u") 'pygen-insert-super)
 (define-key pygen-mode-map (kbd "C-c g k") 'pygen-make-keyword-argument)
 (define-key pygen-mode-map (kbd "C-c g a") 'pygen-make-sequence-argument)
-(define-key pygen-mode-map (kbd "C-c g m") 'pygen-make-static)
+;; (define-key pygen-mode-map (kbd "C-c g m") 'pygen-make-static)
 ;; Toggling of the ".self" keyword is the only ".self" command that is
 ;; bound.
 ;; (define-key pygen-mode-map (kbd "") 'pygen-selfify-symbol)
@@ -1456,6 +1456,9 @@ GitHub repo for this project."
 
 ;; FIXME: Allow generating member functions in the local module using
 ;; instances of a class, rather than the "self" keyword.
+
+;; FIXME: Possibly when adding the "self." prefix, keep the cursor in
+;; position on the original symbol.
 
 
 (provide 'pygen)
