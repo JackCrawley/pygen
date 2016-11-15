@@ -164,10 +164,22 @@ in earlier Emacs versions. Will use `in-string-p' if possible."
   ;; TODO: Verify all python-mode functions are available.
   ;; `python-mode' does not need to be active, the functions just need
   ;; to be usable.
-  (when (eq pygen-navigate-to-definition-command 'elpy-goto-definition)
-	;; TODO: Verify Elpy is installed
-	)
-  )
+  (if (fboundp pygen-navigate-to-definition-command)
+	  (progn 
+		(when (eq pygen-navigate-to-definition-command 'elpy-goto-definition)
+		  ;; TODO: Verify Elpy is installed
+		  (unless elpy-mode
+			(error "Error: Elpy is specified as the navigation tool but `elpy-mode' is not active.")))
+		(when (eq pygen-navigate-to-definition-command 'py-find-definition)
+		  (error "Error: `py-find-definition' not currently useable as a navigation command.")
+		  ;; TODO: once `py-find-definition' is confirmed as working,
+		  ;; allow it as an option.
+		  ;; (unless python-mode
+		  ;; 	(error "Error: Python-Mode is specified as the navigation tool but `python-mode' is not active."))
+		  ))
+	(error (concat "Error: the navigation function `"
+				   (symbol-name pygen-navigate-to-definition-command)
+				   "' is not bound."))))
 
 
 (defun pygen-verify-expression (&optional bounds)
@@ -1412,6 +1424,10 @@ GitHub repo for this project."
 ;; prompt them to ask whether they want the signature modified.
 ;; Warnings should be more explicit if non-keyword arguments are
 ;; added, removed or changed.
+
+;; TODO: Use the Elpy navigation function if it is bound and Elpy is
+;; active. Otherwise, if it's possible to use the default
+;; `py-find-definition' then use that.
 
 ;; TODO: Make sure that the function py-forward-class and similar
 ;; functions aren't used as they aren't that robust. They often elicit
