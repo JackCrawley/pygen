@@ -164,22 +164,24 @@ in earlier Emacs versions. Will use `in-string-p' if possible."
   ;; TODO: Verify all python-mode functions are available.
   ;; `python-mode' does not need to be active, the functions just need
   ;; to be usable.
-  (if (fboundp pygen-navigate-to-definition-command)
-	  (progn 
-		(when (eq pygen-navigate-to-definition-command 'elpy-goto-definition)
-		  ;; TODO: Verify Elpy is installed
-		  (unless elpy-mode
-			(error "Error: Elpy is specified as the navigation tool but `elpy-mode' is not active.")))
-		(when (eq pygen-navigate-to-definition-command 'py-find-definition)
-		  (error "Error: `py-find-definition' not currently useable as a navigation command.")
-		  ;; TODO: once `py-find-definition' is confirmed as working,
-		  ;; allow it as an option.
-		  ;; (unless python-mode
-		  ;; 	(error "Error: Python-Mode is specified as the navigation tool but `python-mode' is not active."))
-		  ))
-	(error (concat "Error: the navigation function `"
-				   (symbol-name pygen-navigate-to-definition-command)
-				   "' is not bound."))))
+  (if pygen-navigate-to-definition-command
+	  (if (fboundp pygen-navigate-to-definition-command)
+		  (progn 
+			(when (eq pygen-navigate-to-definition-command 'elpy-goto-definition)
+			  ;; TODO: Verify Elpy is installed
+			  (unless elpy-mode
+				(error "Error: Elpy is specified as the navigation tool but `elpy-mode' is not active.")))
+			(when (eq pygen-navigate-to-definition-command 'py-find-definition)
+			  (error "Error: `py-find-definition' not currently useable as a navigation command.")
+			  ;; TODO: once `py-find-definition' is confirmed as working,
+			  ;; allow it as an option.
+			  ;; (unless python-mode
+			  ;; 	(error "Error: Python-Mode is specified as the navigation tool but `python-mode' is not active."))
+			  ))
+		(error (concat "Error: the navigation function `"
+					   (symbol-name pygen-navigate-to-definition-command)
+					   "' is not bound.")))
+	(error "No navigation command set.")))
 
 
 (defun pygen-verify-expression (&optional bounds)
