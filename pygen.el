@@ -355,23 +355,21 @@ instead of the form `\"_\"'.
 
 If the `argument' is malformed, this function will do its best to
 extract some kind of meaningful argument."
-  (let (keyword
-		keyword-start)
-	(with-temp-buffer
-	  (insert " ")
-	  (insert argument)
-	  (insert " ")
-	  (goto-char 1)
-	  (if (re-search-forward "[A-Za-z0-9_*]" nil t)
-		  (progn
-			(setq keyword-start (1- (point)))
+  (with-temp-buffer
+	(insert " ")
+	(insert argument)
+	(insert " ")
+	(goto-char 1)
+	(if (re-search-forward "[A-Za-z0-9_*]" nil t)
+		(progn
+		  (let (setq keyword-start (1- (point)))
 			(re-search-forward "[^A-Za-z0-9_*]" nil t)
-			(setq keyword
-				  (buffer-substring-no-properties keyword-start (1- (point))))
-			(when (string= keyword "")
-			  (setq keyword "_"))
-			keyword)
-		nil))))
+			(let ((keyword (buffer-substring-no-properties keyword-start
+														   (1- (point)))))
+			  (when (string= keyword "")
+				(setq keyword "_"))
+			  keyword)))
+	  nil)))
 
 
 (defun pygen-get-expression-arguments (&optional bounds verified)
