@@ -401,7 +401,7 @@ Arguments are returned as a list of names."
 				(let ((current-start (point)))
 				  (forward-sexp)
 				  (delete-region current-start (point))
-				  (insert ""))))
+				  (insert "_"))))
 			;; Now repeatedly try to find arguments.
 			;; First search for comma separated arguments.
 			(let ((previous-position (point)))
@@ -1450,9 +1450,6 @@ GitHub repo for this project."
 ;; FIXME: Generating a static function when the parent is "self"
 ;; should throw an error. Also need to update the gif animation that
 ;; does just this.
-
-;; FIXME: When a function call has an argument which consists of just
-;; an s-expression, the argument will currently be ignored.
 
 
 (provide 'pygen)
