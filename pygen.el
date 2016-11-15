@@ -1451,6 +1451,9 @@ GitHub repo for this project."
 ;; should throw an error. Also need to update the gif animation that
 ;; does just this.
 
+;; FIXME: When a function call has an argument which consists of just
+;; an s-expression, the argument will currently be ignored.
+
 
 (provide 'pygen)
 ;;; pygen.el ends here
