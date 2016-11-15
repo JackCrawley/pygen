@@ -360,15 +360,15 @@ extract some kind of meaningful argument."
 	(insert argument)
 	(insert " ")
 	(goto-char 1)
-	(if (re-search-forward "[A-Za-z0-9_*]" nil t)
-		(progn
-		  (let (setq keyword-start (1- (point)))
-			(re-search-forward "[^A-Za-z0-9_*]" nil t)
-			(let ((keyword (buffer-substring-no-properties keyword-start
-														   (1- (point)))))
-			  (when (string= keyword "")
-				(setq keyword "_"))
-			  keyword)))
+	;; Search for the first symbol - this should be the argument.
+	;; TODO: extract this regular expression into a variable
+	(if (re-search-forward "\\([A-Za-z0-9_*]+\\)[^A-Za-z0-9_*]" nil t)
+		(-if-let (keyword (match-string-no-properties 1))
+			(progn
+			  (if (string= keyword "")
+				  "_"
+				keyword))
+		  "_")
 	  nil)))
 
 
