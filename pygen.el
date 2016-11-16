@@ -1434,24 +1434,26 @@ GitHub repo for this project."
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
 ;; Instead, it just creates a function called MyClass.
+;; This is because of how `py-partial-statement' is implemented.
 
 ;; FIXME: Can't always cope with bracketed imports, e.g:
 ;;     `from X import (...)'
-;; Usually works, but sometimes breaks. Need to find the conditions
-;; under which it breaks.
-;; The conditions may have actually been the same conditions that
-;; caused a different error, which is now fixed. Wait for this error
-;; to pop up again before isolating it.
+;; I only ran into this error once and I didn't record the conditions
+;; for it. Keep this here for now unless the error doesn't pop up
+;; again.
 
 ;; FIXME: Generating a static function when the parent is "self"
 ;; should throw an error. Also need to update the gif animation that
 ;; does just this.
 
 ;; FIXME: Allow generating member functions in the local module using
-;; instances of a class, rather than the "self" keyword.
+;; instances of a class, rather than the "self" keyword. May be
+;; complicated to implement as it requires certain amount of lexical
+;; understanding.
 
 ;; FIXME: Possibly when adding the "self." prefix, keep the cursor in
-;; position on the original symbol.
+;; position on the original symbol. Sometimes it moves it to the left
+;; side of the "self." at the moment.
 
 
 (provide 'pygen)
