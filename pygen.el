@@ -1435,8 +1435,6 @@ GitHub repo for this project."
 ;; TODO: Automatic inference of whether the user wants a static or a
 ;; member function.
 
-;; TODO: Remove "previous value" loops where possible.
-
 ;; FIXME: Can't generate function if it looks like the following:
 ;;     variable = MyClass(function_name)
 ;; Instead, it just creates a function called MyClass.
