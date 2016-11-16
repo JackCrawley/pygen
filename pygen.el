@@ -1428,10 +1428,6 @@ GitHub repo for this project."
 ;; active. Otherwise, if it's possible to use the default
 ;; `py-find-definition' then use that.
 
-;; TODO: Make sure that the function py-forward-class and similar
-;; functions aren't used as they aren't that robust. They often elicit
-;; false positives.
-
 ;; TODO: Automatic inference of whether the user wants a static or a
 ;; member function.
 
