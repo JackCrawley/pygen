@@ -224,7 +224,7 @@ in earlier Emacs versions. Will use `in-string-p' if possible."
 	(goto-char (car bounds))
 	(and
 	 ;; There is enough room for a parent
-	 (>= (point) 2)
+	 (> (point) 2)
 	 ;; The preceding 2 characters match the regular expression for a parent
 	 (string-match "[A-Za-z0-9_]\\." (buffer-substring (- (point) 2) (point))))))
 
@@ -402,19 +402,30 @@ Arguments are returned as a list of names."
 				  (insert "_"))))
 			;; Now repeatedly try to find arguments.
 			;; First search for comma separated arguments.
-			(let ((previous-position (point)))
-			  (while (and (search-forward "," nil t)
-						  (not (pygen-in-string-p)))
-				(let* ((current-argument (buffer-substring-no-properties previous-position (1- (point))))
-					   (parsed-argument (pygen-parse-single-argument current-argument)))
-				  (when parsed-argument
-					(push parsed-argument arguments)
-					(setq previous-position (point))))))
-			;; Now search the last, non-comma separated argument.
+			;; TODO: Make this functional rather than imperative
+			(while (re-search-forward (rx (group (0+ (not (any ","))))
+										  ",")
+									  nil t)
+			  (let ((parsed-argument (pygen-parse-single-argument
+									  (match-string-no-properties 1))))
+				(when parsed-argument
+				  (push parsed-argument arguments))))
 			(let* ((last-argument (buffer-substring-no-properties (point) (point-max)))
 				   (parsed-argument (pygen-parse-single-argument last-argument)))
 			  (when parsed-argument
 				(push parsed-argument arguments)))
+			;; (let ((previous-position (point)))
+			;;   (while (search-forward "," nil t)
+			;; 	(let* ((current-argument (buffer-substring-no-properties previous-position (1- (point))))
+			;; 		   (parsed-argument (pygen-parse-single-argument current-argument)))
+			;; 	  (when parsed-argument
+			;; 		(push parsed-argument arguments)
+			;; 		(setq previous-position (point))))))
+			;; Now search the last, non-comma separated argument.
+			;; (let* ((last-argument (buffer-substring-no-properties (point) (point-max)))
+			;; 	   (parsed-argument (pygen-parse-single-argument last-argument)))
+			;;   (when parsed-argument
+			;; 	(push parsed-argument arguments)))
 			(when arguments
 			  (reverse arguments)))
 		nil))))
