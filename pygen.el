@@ -407,10 +407,9 @@ Arguments are returned as a list of names."
 			(while (re-search-forward (rx (group (0+ (not (any ","))))
 										  ",")
 									  nil t)
-			  (let ((parsed-argument (pygen-parse-single-argument
-									  (match-string-no-properties 1))))
-				(when parsed-argument
-				  (push parsed-argument arguments))))
+			  (-when-let (parsed-argument (pygen-parse-single-argument
+										   (match-string-no-properties 1)))
+				(push parsed-argument arguments)))
 			(let* ((last-argument (buffer-substring-no-properties (point) (point-max)))
 				   (parsed-argument (pygen-parse-single-argument last-argument)))
 			  (when parsed-argument
