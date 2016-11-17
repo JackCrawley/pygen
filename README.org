@@ -29,32 +29,32 @@ animated examples.
 
 | Command                           | Keychord  | Description                                                                                                                                                   |
 |-----------------------------------+-----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| =pygen-generate-class=            | ~C-c C-= c~ | Generate a python class from the reference under point.                                                                                                       |
-| =pygen-generate-function=         | ~C-c C-= f~ | Generate a python function from the reference under point.                                                                                                    |
-| =pygen-generate-static-function=  | ~C-c C-= s~ | Generate a static python function from the reference under point.                                                                                             |
-| =pygen-extract-variable=          | ~C-c C-= v~ | Extract the current region into a variable.                                                                                                                   |
-| =pygen-make-keyword-argument=     | ~C-c C-= k~ | Adds a keyword argument to the current function.                                                                                                              |
-| =pygen-make-sequence-argument=    | ~C-c C-= a~ | Adds a sequence argument to the current function.                                                                                                             |
-| =pygen-add-decorator-to-function= | ~C-c C-= @~ | Adds a decorator in front of the current function.                                                                                                            |
+| =pygen-generate-class=            | ~C-c g c~ | Generate a python class from the reference under point.                                                                                                       |
+| =pygen-generate-function=         | ~C-c g f~ | Generate a python function from the reference under point.                                                                                                    |
+| =pygen-generate-static-function=  | ~C-c g s~ | Generate a static python function from the reference under point.                                                                                             |
+| =pygen-extract-variable=          | ~C-c g v~ | Extract the current region into a variable.                                                                                                                   |
+| =pygen-make-keyword-argument=     | ~C-c g k~ | Adds a keyword argument to the current function.                                                                                                              |
+| =pygen-make-sequence-argument=    | ~C-c g a~ | Adds a sequence argument to the current function.                                                                                                             |
+| =pygen-add-decorator-to-function= | ~C-c g @~ | Adds a decorator in front of the current function.                                                                                                            |
 | =pygen-selfify-symbol=            | N/A       | Puts the word =self.= in front of the current symbol.                                                                                                         |
 | =pygen-unselfify-symbol=          | N/A       | Removes the word =self.= from the current symbol (if it exists).                                                                                              |
-| =pygen-toggle-selfify-symbol=     | ~C-c C-= .~ | Toggles the word =self= in front of the current symbol.                                                                                                       |
-| =pygen-insert-super=              | ~C-c C-= u~ | Inserts a proper call to the current method in the superclass.  This is basically a wrapper for the built-in =python-mode= function that does the same thing. |
+| =pygen-toggle-selfify-symbol=     | ~C-c g .~ | Toggles the word =self= in front of the current symbol.                                                                                                       |
+| =pygen-insert-super=              | ~C-c g u~ | Inserts a proper call to the current method in the superclass.  This is basically a wrapper for the built-in =python-mode= function that does the same thing. |
 
 Some of this functionality is implemented by [[https://github.com/python-rope/ropemacs][Ropemacs]]. However,
 Ropemacs is slow and will not work if there are syntax errors in your
-code.  Pygen is faster and more robust against syntax errors
-elsewhere in your code. This comes at the cost of being less precise -
-in some situations, it won't know where to generate code.  Both
-packages can be used alongside one another.
+code.  Pygen is faster and more robust against syntax errors. This
+comes at the cost of being less precise - in some situations, it won't
+know where to generate code.  Both packages can be used alongside one
+another.
 
 ** Examples
 
 *** Generating Classes & Functions
 
 **** pygen-generate-class
-~C-c C-= c~ - Generate a python class from the reference under point.
-#+CAPTION: ~C-c C-= c~ - Generate a python class from the reference under point.
+~C-c g c~ - Generate a python class from the reference under point.
+#+CAPTION: ~C-c g c~ - Generate a python class from the reference under point.
 [[./gifs/pygen-generate-class.gif]]
 
 It also works on member classes.
@@ -62,8 +62,8 @@ It also works on member classes.
 [[./gifs/pygen-generate-class-self.gif]]
 
 **** pygen-generate-function
-~C-c C-= f~ - Generate a python function from the reference under point.
-#+CAPTION: ~C-c C-= f~ - Generate a python function from the reference under point.
+~C-c g f~ - Generate a python function from the reference under point.
+#+CAPTION: ~C-c g f~ - Generate a python function from the reference under point.
 [[./gifs/pygen-generate-function.gif]]
 
 It also works on member functions.
@@ -71,32 +71,32 @@ It also works on member functions.
 [[./gifs/pygen-generate-function-self.gif]]
 
 **** pygen-generate-static-function
-~C-c C-= s~ - Generate a static python function from the reference under point.
-#+CAPTION: ~C-c C-= s~ - Generate a static python function from the reference under point.
+~C-c g s~ - Generate a static python function from the reference under point.
+#+CAPTION: ~C-c g s~ - Generate a static python function from the reference under point.
 [[./gifs/pygen-generate-static-function.gif]]
 
 *** Generating Variables
 
 **** pygen-extract-variable
-~C-c C-= v~ - Extract the current region into a variable.
-#+CAPTION: ~C-c C-= v~ - Extract the current region into a variable.
+~C-c g v~ - Extract the current region into a variable.
+#+CAPTION: ~C-c g v~ - Extract the current region into a variable.
 [[./gifs/pygen-extract-variable.gif]]
 
 **** pygen-make-keyword-argument
-~C-c C-= k~ - Adds a keyword argument to the current function.
-#+CAPTION: ~C-c C-= k~ - Adds a keyword argument to the current function.
+~C-c g k~ - Adds a keyword argument to the current function.
+#+CAPTION: ~C-c g k~ - Adds a keyword argument to the current function.
 [[./gifs/pygen-make-keyword-argument.gif]]
 
 **** pygen-make-sequence-argument
-~C-c C-= a~ - Adds a sequence argument to the current function.
-#+CAPTION: ~C-c C-= a~ - Adds a sequence argument to the current function.
+~C-c g a~ - Adds a sequence argument to the current function.
+#+CAPTION: ~C-c g a~ - Adds a sequence argument to the current function.
 [[./gifs/pygen-make-sequence-argument.gif]]
 
 *** Automatic Decorators
 
 **** pygen-add-decorator-to-function
-~C-c C-= @~ - Adds a decorator in front of the current function.
-#+CAPTION: ~C-c C-= @~ - Adds a decorator in front of the current function.
+~C-c g @~ - Adds a decorator in front of the current function.
+#+CAPTION: ~C-c g @~ - Adds a decorator in front of the current function.
 [[./gifs/pygen-add-decorator-to-function.gif]]
 
 *** Modifying the "self" keyword:
@@ -108,13 +108,13 @@ Puts the word =self.= in front of the current symbol.
 Removes the word =self.= from the current symbol (if it exists).
 
 **** pygen-toggle-selfify-symbol
-~C-c C-= .~ - Toggles the =self.= keyword in front of the current symbol.
-#+CAPTION: ~C-c C-= .~ - Toggles the =self.= keyword in front of the current symbol.
+~C-c g .~ - Toggles the =self.= keyword in front of the current symbol.
+#+CAPTION: ~C-c g .~ - Toggles the =self.= keyword in front of the current symbol.
 [[./gifs/pygen-toggle-selfify-symbol.gif]]
 
 *** Dynamic Boilerplate Code Generation
 
 **** pygen-insert-super
-~C-c C-= u~ - Inserts a proper call to the current method in the superclass.
-#+CAPTION: ~C-c C-= u~ - Inserts a proper call to the current method in the superclass.
+~C-c g u~ - Inserts a proper call to the current method in the superclass.
+#+CAPTION: ~C-c g u~ - Inserts a proper call to the current method in the superclass.
 [[./gifs/pygen-insert-super.gif]]
