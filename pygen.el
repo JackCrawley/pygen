@@ -153,11 +153,8 @@ is indented, it won't be matched.")
 (defun pygen-in-string-p ()
   "Checks if the point is currently in a string.
 
-Substitute for the `in-string-p' function, which is not available
-in earlier Emacs versions. Will use `in-string-p' if possible."
-  (if (fboundp 'in-string-p)
-	  (in-string-p)
-	(elt (syntax-ppss) 3)))
+Substitute for the `in-string-p' function, which is depreciated."
+  (nth 3 (syntax-ppss)))
 
 
 (defun pygen-verify-environment ()
