@@ -4,12 +4,16 @@ Pygen is a package that allows the user to automatically generate
 Python code.
 
 * TODO Installation
-:LOGBOOK:
-- State "TODO"       from              [2016-10-16 Sun 17:54]
-:END:
 
-This section still needs to be completed. Installation should shortly
-be available on MELPA.
+Download =pygen= from MELPA using =M-x package-list-packages=. 
+
+To load, require the package and add a hook to enable =pygen-mode=
+when =python-mode= is loaded:
+
+#+BEGIN_SRC emacs-lisp
+(require 'pygen)
+(add-hook 'python-mode-hook 'pygen-mode)
+#+END_SRC
 
 * Dependencies
 
