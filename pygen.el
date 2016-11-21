@@ -1388,7 +1388,6 @@ GitHub repo for this project."
   :keymap pygen-mode-map
   :lighter ""
   (when pygen-mode
-	(pygen-verify-environment)
 	(run-hooks pygen-mode-hook)))
 
 
