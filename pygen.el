@@ -4,7 +4,7 @@
 
 ;; Author: Jack Crawley <http://www.github.com/jackcrawley>
 ;; Keywords: python, code generation
-;; Version: 0.2.6
+;; Version: 0.2.7
 ;; Package-Requires: ((elpy "1.12.0") (python-mode "6.2.2") (dash "2.13.0"))
 ;; URL: https://github.com/JackCrawley/pygen/
 
@@ -117,7 +117,7 @@
   :prefix "pygen-")
 
 
-(defconst pygen-version "0.2.6")
+(defconst pygen-version "0.2.7")
 
 
 (defcustom pygen-mode-hook nil
