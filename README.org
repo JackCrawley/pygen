@@ -1,9 +1,11 @@
+NOTE: I have migrated to PyCharm, so I won't be updating this project for the foreseeable future. If anyone would like to extend it, feel free to create a new fork.
+
 * Introduction
 
 Pygen is a package that allows the user to automatically generate
 Python code.
 
-* TODO Installation
+* Installation
 
 Download =pygen= from MELPA using =M-x package-list-packages=. 
 
