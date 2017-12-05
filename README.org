@@ -19,7 +19,7 @@ when =python-mode= is loaded:
 
 * Dependencies
 
-Pygen leverages [[https://github.com/jorgenschaefer/elpy][Elpy]] and [[https://launchpad.net/python-mode][python-mode]].  That's the package called
+Pygen leverages [[https://github.com/jorgenschaefer/elpy][Elpy]] and [[https://gitlab.com/python-mode-devs/python-mode][python-mode]].  That's the package called
 =python-mode= - not the mode itself.  As of Emacs 24.5.1,
 =python-mode= is not the default Python mode but a separate package.
 The default package is =python.el=.
